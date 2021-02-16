@@ -13,8 +13,7 @@ class ParseCronTestCase(unittest.TestCase):
     def tearDown(self):
         print()
 
-
-    def printCronResults(self, cron_str, cron_obj):
+    def print_cron_results(self, cron_str, cron_obj):
         print(f"Input: {cron_str}")
         print("Result:")
         print(f"\t{cron_obj}")
@@ -34,7 +33,7 @@ class ParseCronTestCase(unittest.TestCase):
                     "daysOfWeek": [], "years": [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]}
         cron_str = '6 4/3 8,18-20,26-28 * ? 2020-2030'
         cron_obj = AWSCron(cron_str)
-        self.printCronResults(cron_str, cron_obj)
+        self.print_cron_results(cron_str, cron_obj)
         self.assertEqual(expected["minutes"], cron_obj.minutes)
         self.assertEqual(expected["hours"], cron_obj.hours)
         self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
@@ -55,7 +54,7 @@ class ParseCronTestCase(unittest.TestCase):
                     "years": [x for x in range(2002, 2025 + 1)]}
         cron_str = '15 10 ? * 6L 2002-2025'
         cron_obj = AWSCron(cron_str)
-        self.printCronResults(cron_str, cron_obj)
+        self.print_cron_results(cron_str, cron_obj)
         self.assertEqual(expected["minutes"], cron_obj.minutes)
         self.assertEqual(expected["hours"], cron_obj.hours)
         self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
@@ -77,7 +76,7 @@ class ParseCronTestCase(unittest.TestCase):
 
         cron_str = '*/5 10 ? * MON-FRI *'
         cron_obj = AWSCron(cron_str)
-        self.printCronResults(cron_str, cron_obj)
+        self.print_cron_results(cron_str, cron_obj)
         self.assertEqual(expected["minutes"], cron_obj.minutes)
         self.assertEqual(expected["hours"], cron_obj.hours)
         self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
@@ -99,7 +98,7 @@ class ParseCronTestCase(unittest.TestCase):
 
         cron_str = '0 */3 */1 * ? *'
         cron_obj = AWSCron(cron_str)
-        self.printCronResults(cron_str, cron_obj)
+        self.print_cron_results(cron_str, cron_obj)
         self.assertEqual(expected["minutes"], cron_obj.minutes)
         self.assertEqual(expected["hours"], cron_obj.hours)
         self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
@@ -121,7 +120,7 @@ class ParseCronTestCase(unittest.TestCase):
 
         cron_str = '15 12 ? * sun,mon *'
         cron_obj = AWSCron(cron_str)
-        self.printCronResults(cron_str, cron_obj)
+        self.print_cron_results(cron_str, cron_obj)
         self.assertEqual(expected["minutes"], cron_obj.minutes)
         self.assertEqual(expected["hours"], cron_obj.hours)
         self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
@@ -143,7 +142,7 @@ class ParseCronTestCase(unittest.TestCase):
 
         cron_str = '10 7/5 7 * ? 2020'
         cron_obj = AWSCron(cron_str)
-        self.printCronResults(cron_str, cron_obj)
+        self.print_cron_results(cron_str, cron_obj)
         self.assertEqual(expected["minutes"], cron_obj.minutes)
         self.assertEqual(expected["hours"], cron_obj.hours)
         self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
