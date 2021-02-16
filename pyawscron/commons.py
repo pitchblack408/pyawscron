@@ -24,7 +24,7 @@ class Commons:
                 break
             if days_of_week[0] == 'L':
                 if days_of_week[1] == this_date.day + 1:
-                    same_day_next_week = datetime.datetime.fromtimestamp(this_date.time() + 7 * 24 * 3600000, tz=datetime.timezone.utc)
+                    same_day_next_week = datetime.datetime.fromtimestamp((this_date.timetz().second * 1000) + 7 * 24 * 3600000, tz=datetime.timezone.utc)
                     if same_day_next_week.month != this_date.month:
                         return [i]
             elif days_of_week[0] == '#':
