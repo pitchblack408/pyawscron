@@ -4,7 +4,7 @@ from datetime import tzinfo
 from .commons import Commons
 import time
 
-class Occurance():
+class Occurrence():
     def __init__(self, AWSCron, utc_datetime):
         if utc_datetime.tzinfo == None or utc_datetime.tzinfo != datetime.timezone.utc:
             raise Exception("Occurance utc_datetime must have tzinfo == datetime.timezone.utc")

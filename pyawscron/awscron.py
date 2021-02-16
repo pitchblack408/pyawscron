@@ -1,4 +1,4 @@
-from .occurance import Occurance
+from .occurrence import Occurrence
 import datetime
 
 class AWSCron:
@@ -41,10 +41,10 @@ class AWSCron:
         self.rules = cron.split(' ')
         self.__parse()
 
-    def occurance(self, utc_datetime):
+    def occurrence(self, utc_datetime):
         if utc_datetime.tzinfo == None or utc_datetime.tzinfo != datetime.timezone.utc:
             raise Exception("Occurance utc_datetime must have tzinfo == datetime.timezone.utc")
-        return Occurance(self, utc_datetime)
+        return Occurrence(self, utc_datetime)
 
     def __str__(self):
         return f"cron({self.cron})"
