@@ -34,7 +34,7 @@ class NextTestCase(unittest.TestCase):
         dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
         results = []
         for expected in expected_list:
-            print(f"Input {cron}, occurance: {dt}")
+            print(f"Input {cron}, occurrence: {dt}")
             dt = cron.occurrence(dt).next()
             results.append(str(dt))
             print(f"Result: {dt}\n")
