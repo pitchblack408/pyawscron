@@ -33,14 +33,14 @@ class Occurrence():
         is_same_month = True if year == current_year and month == current_month else False
         p_days_of_month = parsed.days_of_month
         if len(p_days_of_month) == 0:
-            p_days_of_month = Commons.get_days_of_month_from_days_of_week(year, month, parsed.daysOfWeek)
+            p_days_of_month = Commons.get_days_of_month_from_days_of_week(year, month, parsed.days_of_week)
         elif p_days_of_month[0] == 'L':
             p_days_of_month = Commons.get_days_of_month_for_L(year, month)
         elif p_days_of_month[0] == 'W':
             p_days_of_month = Commons.get_days_of_month_for_W(year, month, p_days_of_month[1])
-        day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= ( current_day_of_month if is_same_month else 1))
+        day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
         if not day_of_month:
-            return self.__find_once(parsed, datetime.datetime(year, month + 1, 1, tzinfo=datetime.timezone.utc))
+            return self.__find_once(parsed, datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc))
         is_same_date = is_same_month and day_of_month == current_day_of_month
         hour = Commons.array_find_first(parsed.hours, lambda c:  c >= (current_hour if is_same_date else 0))
         if hour is None:
