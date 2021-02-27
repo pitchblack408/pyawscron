@@ -3,6 +3,17 @@ import time
 
 class Commons:
 
+
+    @staticmethod
+    def python_to_aws_day_of_week(python_day_of_week):
+        map = {0:1, 1:2, 2:3, 3:4, 4:5, 5:6, 6:7}
+        return map[python_day_of_week]
+
+    @staticmethod
+    def aws_to_python_day_of_week(aws_day_of_week):
+        map = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5, 7:6}
+        return map[aws_day_of_week]
+
     @staticmethod
     def array_find_first(sequence, function):
         """
@@ -18,21 +29,21 @@ class Commons:
         days_of_month = []
         index = 0 # only for "#" use case
         for i in range(1,31 + 1,1):
-            this_date = datetime.datetime(year, month - 1, i, tzinfo=datetime.timezone.utc)
+            this_date = datetime.datetime(year, month, i, tzinfo=datetime.timezone.utc)
             # already after last day of month
-            if this_date.month != month - 1:
+            if this_date.month != month:
                 break
             if days_of_week[0] == 'L':
-                if days_of_week[1] == this_date.day + 1:
-                    same_day_next_week = datetime.datetime.fromtimestamp((this_date.timetz().second * 1000) + 7 * 24 * 3600000, tz=datetime.timezone.utc)
+                if days_of_week[1] == Commons.python_to_aws_day_of_week(this_date.weekday()) + 1:
+                    same_day_next_week = datetime.datetime.fromtimestamp(int(this_date.timestamp()) + 7 * 24 * 3600, tz=datetime.timezone.utc)
                     if same_day_next_week.month != this_date.month:
                         return [i]
             elif days_of_week[0] == '#':
-                if days_of_week[1] == this_date.day + 1:
+                if days_of_week[1] == Commons.python_to_aws_day_of_week(this_date.weekday()) + 1:
                     index += 1
                 if days_of_week[2] == index:
                     return [i]
-            elif (this_date.day + 1) in days_of_week:
+            elif Commons.python_to_aws_day_of_week(this_date.weekday()) + 1 in days_of_week:
                 days_of_month.append(i)
         return days_of_month
 
@@ -60,7 +71,7 @@ class Commons:
         this_date =  datetime.datetime(year, month - 1, day, tzinfo=datetime.timezone.utc)
         if this_date.month != month - 1:
             return False
-        return this_date.day > 0 and this_date.day < 6
+        return this_date.weekday() > 0 and this_date.weekday() < 6
 
     @staticmethod
     def current_milli_time():
