@@ -4,7 +4,7 @@ A python port from a typescript project.
 https://github.com/beemhq/aws-cron-parser
 
 # Work in progess
-Currently, parsing test cases pass and one of the next_tests passes:
+Currently, parsing test cases pass and some of the next_tests passes:
 * test_generate_multiple_next_occurences1
 * test_generate_multiple_next_occurences2
 
