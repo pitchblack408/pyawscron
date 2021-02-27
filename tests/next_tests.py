@@ -18,18 +18,17 @@ class NextTestCase(unittest.TestCase):
 
     def test_generate_multiple_next_occurences1(self):
         cron = '23,24,25 17,18 25 MAR/4 ? 2020,2021,2023,2028'
-        expected_list= [ '2020-07-25 17:23:00+00:00',
-                    '2020-07-25 17:24:00+00:00',
-                    '2020-07-25 17:25:00+00:00',
-                    '2020-07-25 18:23:00+00:00',
-                    '2020-07-25 18:24:00+00:00',
-                    '2020-07-25 18:25:00+00:00',
-
-                    '2020-11-25 17:23:00+00:00',
-                    '2020-11-25 17:24:00+00:00',
-                    '2020-11-25 17:25:00+00:00',
-                    '2020-11-25 18:23:00+00:00'
-                ]
+        expected_list= ['2020-07-25 17:23:00+00:00',
+                        '2020-07-25 17:24:00+00:00',
+                        '2020-07-25 17:25:00+00:00',
+                        '2020-07-25 18:23:00+00:00',
+                        '2020-07-25 18:24:00+00:00',
+                        '2020-07-25 18:25:00+00:00',
+                        '2020-11-25 17:23:00+00:00',
+                        '2020-11-25 17:24:00+00:00',
+                        '2020-11-25 17:25:00+00:00',
+                        '2020-11-25 18:23:00+00:00'
+                        ]
         cron = AWSCron(cron)
         dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
         results = []
@@ -60,6 +59,69 @@ class NextTestCase(unittest.TestCase):
                          ]
         cron = AWSCron(cron)
         dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\n")
+        self.assertListEqual(expected_list, results)
+
+    def test_generate_multiple_next_occurences3(self):
+        """
+
+        :return:
+        """
+        cron = '0 */3 */1 * ? *'
+        expected_list = ['2020-12-07 18:00:00+00:00',
+                         '2020-12-07 21:00:00+00:00',
+                         '2020-12-08 00:00:00+00:00',
+                         '2020-12-08 03:00:00+00:00'
+                         ]
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 11, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\n")
+        self.assertListEqual(expected_list, results)
+
+    def test_generate_multiple_next_occurences4(self):
+        """
+
+        :return:
+        """
+        cron = '15 12 ? * sun,mon *'
+        expected_list = ['2020-12-13 12:15:00+00:00',
+                         '2020-12-14 12:15:00+00:00',
+                         '2020-12-20 12:15:00+00:00',
+                         '2020-12-21 12:15:00+00:00'
+                         ]
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 11, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\n")
+        self.assertListEqual(expected_list, results)
+
+    def test_generate_multiple_next_6(self):
+        """
+
+        :return:
+        """
+        cron = '10 7/5 7 * ? 2020,2021'
+        expected_list = ['2020-12-07 17:10:00+00:00',
+                         '2020-12-07 22:10:00+00:00',
+                         '2020-12-07 07:10:00+00:00',
+                         '2020-12-07 12:10:00+00:00'
+                         ]
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 11, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
         results = []
         for expected in expected_list:
             print(f"Input {cron}, occurrence: {dt}")
