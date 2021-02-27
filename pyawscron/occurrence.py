@@ -3,6 +3,7 @@ import datetime
 from datetime import tzinfo
 from .commons import Commons
 import time
+from dateutil.relativedelta import relativedelta
 
 class Occurrence():
     def __init__(self, AWSCron, utc_datetime):
@@ -40,11 +41,13 @@ class Occurrence():
             p_days_of_month = Commons.get_days_of_month_for_W(year, month, p_days_of_month[1])
         day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
         if not day_of_month:
-            return self.__find_once(parsed, datetime.datetime(year, month + 1, 1, tzinfo=datetime.timezone.utc))
+            dt = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(months=+1)
+            return self.__find_once(parsed, dt)
         is_same_date = is_same_month and day_of_month == current_day_of_month
         hour = Commons.array_find_first(parsed.hours, lambda c:  c >= (current_hour if is_same_date else 0))
         if hour is None:
-            return self.__find_once(parsed, datetime.datetime(year, month, day_of_month + 1, tzinfo=datetime.timezone.utc))
+            dt = datetime.datetime(year, month, day_of_month, tzinfo=datetime.timezone.utc) + relativedelta(days=+1)
+            return self.__find_once(parsed, dt)
         minute = Commons.array_find_first(parsed.minutes, lambda c: c >= (current_minute if is_same_date and hour == current_hour else 0))
         if minute is None:
             return self.__find_once(parsed, datetime.datetime(year, month, day_of_month, hour + 1, tzinfo=datetime.timezone.utc))
