@@ -4,14 +4,13 @@ A python port from a typescript project.
 https://github.com/beemhq/aws-cron-parser
 
 # Work in progess
- Not fully functional, 
- Currently, parsing test cases pass and one of the next_tests passes:
-     * test_generate_multiple_next_occurences1
+Currently, parsing test cases pass and one of the next_tests passes:
+ * test_generate_multiple_next_occurences1
 
-## cron(fields)
 
-[AWS Cron Expressions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)
 
+## [AWS Cron Expressions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)
+### cron(fields)
 <table>
    <thead>
       <tr>
