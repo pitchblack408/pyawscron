@@ -6,7 +6,7 @@ import time
 
 class Occurrence():
     def __init__(self, AWSCron, utc_datetime):
-        if utc_datetime.tzinfo == None or utc_datetime.tzinfo != datetime.timezone.utc:
+        if utc_datetime.tzinfo is None or utc_datetime.tzinfo != datetime.timezone.utc:
             raise Exception("Occurance utc_datetime must have tzinfo == datetime.timezone.utc")
         self.utc_datetime = utc_datetime
         self.cron = AWSCron
@@ -40,13 +40,13 @@ class Occurrence():
             p_days_of_month = Commons.get_days_of_month_for_W(year, month, p_days_of_month[1])
         day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
         if not day_of_month:
-            return self.__find_once(parsed, datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc))
+            return self.__find_once(parsed, datetime.datetime(year, month + 1, 1, tzinfo=datetime.timezone.utc))
         is_same_date = is_same_month and day_of_month == current_day_of_month
         hour = Commons.array_find_first(parsed.hours, lambda c:  c >= (current_hour if is_same_date else 0))
         if hour is None:
             return self.__find_once(parsed, datetime.datetime(year, month, day_of_month + 1, tzinfo=datetime.timezone.utc))
         minute = Commons.array_find_first(parsed.minutes, lambda c: c >= (current_minute if is_same_date and hour == current_hour else 0))
-        if minute == None:
+        if minute is None:
             return self.__find_once(parsed, datetime.datetime(year, month, day_of_month, hour + 1, tzinfo=datetime.timezone.utc))
 
         return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=datetime.timezone.utc)
@@ -55,5 +55,7 @@ class Occurrence():
     def next(self):
         self.iter = 0
         from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) + 1) * 60000
+        if from_epoch == 1595701560000:
+            print("")
         dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
         return self.__find_once(self.cron, dt)

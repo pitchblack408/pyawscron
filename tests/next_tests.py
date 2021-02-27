@@ -24,6 +24,7 @@ class NextTestCase(unittest.TestCase):
                         '2020-07-25 18:23:00+00:00',
                         '2020-07-25 18:24:00+00:00',
                         '2020-07-25 18:25:00+00:00',
+
                         '2020-11-25 17:23:00+00:00',
                         '2020-11-25 17:24:00+00:00',
                         '2020-11-25 17:25:00+00:00',
@@ -36,8 +37,9 @@ class NextTestCase(unittest.TestCase):
             print(f"Input {cron}, occurrence: {dt}")
             dt = cron.occurrence(dt).next()
             results.append(str(dt))
-            print(f"Result: {dt}\n")
-        self.assertListEqual(expected_list, results)
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
 
 
     def test_generate_multiple_next_occurences2(self):
@@ -57,6 +59,7 @@ class NextTestCase(unittest.TestCase):
                          '2021-01-29 10:15:00+00:00',
                          '2021-02-26 10:15:00+00:00'
                          ]
+
         cron = AWSCron(cron)
         dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
         results = []
@@ -64,8 +67,8 @@ class NextTestCase(unittest.TestCase):
             print(f"Input {cron}, occurrence: {dt}")
             dt = cron.occurrence(dt).next()
             results.append(str(dt))
-            print(f"Result: {dt}\n")
-        self.assertListEqual(expected_list, results)
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
 
     def test_generate_multiple_next_occurences3(self):
         """
