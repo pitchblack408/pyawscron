@@ -7,6 +7,7 @@ https://github.com/beemhq/aws-cron-parser
 Currently, parsing test cases pass and some of the next_tests passes:
 * test_generate_multiple_next_occurences1
 * test_generate_multiple_next_occurences2
+* test_generate_multiple_next_occurences3
 
 
 ## [AWS Cron Expressions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)
