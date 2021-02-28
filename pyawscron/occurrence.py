@@ -58,7 +58,7 @@ class Occurrence():
     def next(self):
         self.iter = 0
         from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) + 1) * 60000
-        if from_epoch == 1595701560000:
+        if from_epoch == 1604793660000:
             print("")
         dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
         return self.__find_once(self.cron, dt)
