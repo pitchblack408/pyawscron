@@ -82,14 +82,14 @@ class NextTestCase(unittest.TestCase):
                          '2020-12-08 03:00:00+00:00'
                          ]
         cron = AWSCron(cron)
-        dt = datetime.datetime(2020, 11, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
+        dt = datetime.datetime(2020, 12, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
         results = []
         for expected in expected_list:
             print(f"Input {cron}, occurrence: {dt}")
             dt = cron.occurrence(dt).next()
             results.append(str(dt))
-            print(f"Result: {dt}\n")
-        self.assertListEqual(expected_list, results)
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
 
     def test_generate_multiple_next_occurences4(self):
         """
@@ -103,14 +103,14 @@ class NextTestCase(unittest.TestCase):
                          '2020-12-21 12:15:00+00:00'
                          ]
         cron = AWSCron(cron)
-        dt = datetime.datetime(2020, 11, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
+        dt = datetime.datetime(2020, 12, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
         results = []
         for expected in expected_list:
             print(f"Input {cron}, occurrence: {dt}")
             dt = cron.occurrence(dt).next()
             results.append(str(dt))
-            print(f"Result: {dt}\n")
-        self.assertListEqual(expected_list, results)
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
 
     def test_generate_multiple_next_6(self):
         """
@@ -124,11 +124,11 @@ class NextTestCase(unittest.TestCase):
                          '2020-12-07 12:10:00+00:00'
                          ]
         cron = AWSCron(cron)
-        dt = datetime.datetime(2020, 11, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
+        dt = datetime.datetime(2020, 12, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
         results = []
         for expected in expected_list:
             print(f"Input {cron}, occurrence: {dt}")
             dt = cron.occurrence(dt).next()
             results.append(str(dt))
-            print(f"Result: {dt}\n")
-        self.assertListEqual(expected_list, results)
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
