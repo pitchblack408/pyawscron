@@ -6,12 +6,14 @@ class Commons:
 
     @staticmethod
     def python_to_aws_day_of_week(python_day_of_week):
-        map = {0:1, 1:2, 2:3, 3:4, 4:5, 5:6, 6:7}
+             # MON, TUE, WED, THU, FRI, SAT, SUN
+        map = {0:2, 1:3, 2:4, 3:5, 4:6, 5:7, 6:1}
         return map[python_day_of_week]
 
     @staticmethod
     def aws_to_python_day_of_week(aws_day_of_week):
-        map = {1:0, 2:1, 3:2, 4:3, 5:4, 6:5, 7:6}
+             # MON, TUE, WED, THU, FRI, SAT, SUN
+        map = {2:0, 3:1, 4:2, 5:3, 6:4, 7:5, 1:6}
         return map[aws_day_of_week]
 
     @staticmethod
@@ -28,7 +30,7 @@ class Commons:
     def get_days_of_month_from_days_of_week(year, month, days_of_week):
         days_of_month = []
         index = 0 # only for "#" use case
-        for i in range(1,31 + 1,1):
+        for i in range(1, 31 + 1, 1):
             this_date = datetime.datetime(year, month, i, tzinfo=datetime.timezone.utc)
             # already after last day of month
             if this_date.month != month:
@@ -43,7 +45,7 @@ class Commons:
                     index += 1
                 if days_of_week[2] == index:
                     return [i]
-            elif Commons.python_to_aws_day_of_week(this_date.weekday()) + 1 in days_of_week:
+            elif Commons.python_to_aws_day_of_week(this_date.weekday()) in days_of_week:
                 days_of_month.append(i)
         return days_of_month
 
