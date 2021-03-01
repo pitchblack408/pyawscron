@@ -28,9 +28,9 @@ class Occurrence():
         year = Commons.array_find_first(parsed.years, lambda c: c >= current_year)
         if year is None:
             return None
-        month = Commons.array_find_first(parsed.months, lambda c: c >= ( current_month if year == current_year else 1))
+        month = Commons.array_find_first(parsed.months, lambda c: c >= (current_month if year == current_year else 1))
         if not month:
-            return self.__find_once(parsed, datetime.datetime(year + 1, 0, tzinfo=datetime.timezone.utc))
+            return self.__find_once(parsed, datetime.datetime(year + 1, 1, 1, tzinfo=datetime.timezone.utc))
         is_same_month = True if year == current_year and month == current_month else False
         p_days_of_month = parsed.days_of_month
         if len(p_days_of_month) == 0:
