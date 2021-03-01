@@ -36,12 +36,12 @@ class Commons:
             if this_date.month != month:
                 break
             if days_of_week[0] == 'L':
-                if days_of_week[1] == Commons.python_to_aws_day_of_week(this_date.weekday()) + 1:
+                if days_of_week[1] == Commons.python_to_aws_day_of_week(this_date.weekday()):
                     same_day_next_week = datetime.datetime.fromtimestamp(int(this_date.timestamp()) + 7 * 24 * 3600, tz=datetime.timezone.utc)
                     if same_day_next_week.month != this_date.month:
                         return [i]
             elif days_of_week[0] == '#':
-                if days_of_week[1] == Commons.python_to_aws_day_of_week(this_date.weekday()) + 1:
+                if days_of_week[1] == Commons.python_to_aws_day_of_week(this_date.weekday()):
                     index += 1
                 if days_of_week[2] == index:
                     return [i]
@@ -52,8 +52,8 @@ class Commons:
     @staticmethod
     def get_days_of_month_for_L(year, month):
         for i in range(31,28,-1):
-            this_date = datetime.datetime(year, month - 1, i, tzinfo=datetime.timezone.utc)
-            if this_date.month == month - 1:
+            this_date = datetime.datetime(year, month, i, tzinfo=datetime.timezone.utc)
+            if this_date.month == month:
                 return [i]
         raise Exception('get_days_of_month_for_L - should not happen')
 
@@ -70,8 +70,8 @@ class Commons:
     def is_weekday(year, month, day):
         if day < 1 or day > 31:
             return False
-        this_date =  datetime.datetime(year, month - 1, day, tzinfo=datetime.timezone.utc)
-        if this_date.month != month - 1:
+        this_date =  datetime.datetime(year, month, day, tzinfo=datetime.timezone.utc)
+        if this_date.month != month:
             return False
         return this_date.weekday() > 0 and this_date.weekday() < 6
 
