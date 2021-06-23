@@ -1,5 +1,6 @@
 import datetime
 import time
+from dateutil.relativedelta import relativedelta
 
 class Commons:
 
@@ -50,12 +51,13 @@ class Commons:
         return days_of_month
 
     @staticmethod
-    def get_days_of_month_for_L(year, month):
-        for i in range(31, 28, -1):
-            this_date = datetime.datetime(year, month, i, tzinfo=datetime.timezone.utc)
+    def get_days_of_month_for_L(year, month, days_before):
+        for i in range(31, 28 - 1, -1):
+            this_date = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(days=i-1)
             if this_date.month == month:
-                return [i]
+                return [i - days_before]
         raise Exception('get_days_of_month_for_L - should not happen')
+
 
     @staticmethod
     def get_days_of_month_for_W(year, month, day):
