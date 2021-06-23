@@ -42,7 +42,7 @@ class Occurrence():
         elif p_days_of_month[0] == 'L':
             p_days_of_month = Commons.get_days_of_month_for_L(year, month, int(p_days_of_month[1]))
         elif p_days_of_month[0] == 'W':
-            p_days_of_month = Commons.get_days_of_month_for_W(year, month, p_days_of_month[1])
+            p_days_of_month = Commons.get_days_of_month_for_W(year, month, int(p_days_of_month[1]))
 
         day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
         if not day_of_month:

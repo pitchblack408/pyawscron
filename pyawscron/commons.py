@@ -62,7 +62,6 @@ class Commons:
     @staticmethod
     def get_days_of_month_for_W(year, month, day):
         # offset = [0, 1, -1, 2, -2].find((c) => is_weekday(year, month, day + c))
-        # TODO make sure this below works
         offset = Commons.array_find_first([0, 1, -1, 2, -2], lambda c: Commons.is_weekday(year, month, day + c))
         if offset is None:
             raise Exception('get_days_of_month_for_W - should not happen')
