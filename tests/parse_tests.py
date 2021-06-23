@@ -29,7 +29,8 @@ class ParseCronTestCase(unittest.TestCase):
         should parse AWS cron expressions #1
         """
         expected = {"minutes": [6], "hours": [4, 7, 10, 13, 16, 19, 22],
-                    "daysOfMonth": [8, 18, 19, 20, 26, 27, 28], "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                    "daysOfMonth": [8, 18, 19, 20, 26, 27, 28],
+                    "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                     "daysOfWeek": [], "years": [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]}
         cron_str = '6 4/3 8,18-20,26-28 * ? 2020-2030'
         cron_obj = AWSCron(cron_str)
@@ -141,6 +142,49 @@ class ParseCronTestCase(unittest.TestCase):
                     "years": [2020]}
 
         cron_str = '10 7/5 7 * ? 2020'
+        cron_obj = AWSCron(cron_str)
+        self.print_cron_results(cron_str, cron_obj)
+        self.assertEqual(expected["minutes"], cron_obj.minutes)
+        self.assertEqual(expected["hours"], cron_obj.hours)
+        self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
+        self.assertEqual(expected["months"], cron_obj.months)
+        self.assertEqual(expected["daysOfWeek"], cron_obj.days_of_week)
+        self.assertEqual(expected["years"], cron_obj.years)
+
+
+    def test_cron_expressions7(self):
+        """
+        should parse AWS cron expressions #7
+        """
+        expected = {"minutes": [0, 5, 10, 15, 20, 25],
+                    "hours": [22],
+                    "daysOfMonth": [9],
+                    "months": [5],
+                    "daysOfWeek": [],
+                    "years": [2020, 2021, 2022]}
+
+        cron_str = '0-29/5 22 09 05 ? 2020,2021,2022'
+        cron_obj = AWSCron(cron_str)
+        self.print_cron_results(cron_str, cron_obj)
+        self.assertEqual(expected["minutes"], cron_obj.minutes)
+        self.assertEqual(expected["hours"], cron_obj.hours)
+        self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
+        self.assertEqual(expected["months"], cron_obj.months)
+        self.assertEqual(expected["daysOfWeek"], cron_obj.days_of_week)
+        self.assertEqual(expected["years"], cron_obj.years)
+
+    def test_cron_expressions8(self):
+        """
+        should parse AWS cron expressions #8
+        """
+        expected = {"minutes": [30],
+                    "hours": [9],
+                    "daysOfMonth": ['L', 2],
+                    "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                    "daysOfWeek": [],
+                    "years": [x for x in range(1970,  2199 + 1)]}
+
+        cron_str = '30 9 L-2 * ? *'
         cron_obj = AWSCron(cron_str)
         self.print_cron_results(cron_str, cron_obj)
         self.assertEqual(expected["minutes"], cron_obj.minutes)
