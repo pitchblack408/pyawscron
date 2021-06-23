@@ -160,7 +160,7 @@ class ParseCronTestCase(unittest.TestCase):
                     "daysOfMonth": [9],
                     "months": [5],
                     "daysOfWeek": [],
-                    "years": [2020,2021,2022]}
+                    "years": [2020, 2021, 2022]}
 
         cron_str = '0-29/5 22 09 05 ? 2020,2021,2022'
         cron_obj = AWSCron(cron_str)
