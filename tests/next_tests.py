@@ -120,8 +120,8 @@ class NextTestCase(unittest.TestCase):
         cron = '10 7/5 7 * ? 2020,2021'
         expected_list = ['2020-12-07 17:10:00+00:00',
                          '2020-12-07 22:10:00+00:00',
-                         '2020-12-07 07:10:00+00:00',
-                         '2020-12-07 12:10:00+00:00'
+                         '2021-01-07 07:10:00+00:00',
+                         '2021-01-07 12:10:00+00:00'
                          ]
         cron = AWSCron(cron)
         dt = datetime.datetime(2020, 12, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
