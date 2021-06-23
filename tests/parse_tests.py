@@ -151,6 +151,30 @@ class ParseCronTestCase(unittest.TestCase):
         self.assertEqual(expected["years"], cron_obj.years)
 
 
+    def test_cron_expressions7(self):
+        """
+        should parse AWS cron expressions #7
+        """
+        expected = {"minutes": [0, 5, 10, 15, 20, 25],
+                    "hours": [22],
+                    "daysOfMonth": [9],
+                    "months": [5],
+                    "daysOfWeek": [],
+                    "years": [2020,2021,2022]}
+
+        cron_str = '0-29/5 22 09 05 ? 2020,2021,2022'
+        cron_obj = AWSCron(cron_str)
+        self.print_cron_results(cron_str, cron_obj)
+        self.assertEqual(expected["minutes"], cron_obj.minutes)
+        self.assertEqual(expected["hours"], cron_obj.hours)
+        self.assertEqual(expected["daysOfMonth"], cron_obj.days_of_month)
+        self.assertEqual(expected["months"], cron_obj.months)
+        self.assertEqual(expected["daysOfWeek"], cron_obj.days_of_week)
+        self.assertEqual(expected["years"], cron_obj.years)
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

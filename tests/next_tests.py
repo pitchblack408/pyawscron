@@ -132,3 +132,61 @@ class NextTestCase(unittest.TestCase):
             results.append(str(dt))
             print(f"Result: {dt}\tExpected: {expected}\n")
             self.assertEqual(expected, str(dt))
+
+
+# Good test for parsing as well
+    def test_generate_multiple_next_7(self):
+        """
+
+        :return:
+        """
+        cron = '0-29/5 22 09 05 ? 2020,2021,2022'
+        expected_list = ['2021-05-09 22:00:00+00:00',
+                         '2021-05-09 22:05:00+00:00',
+                         '2021-05-09 22:10:00+00:00',
+                         '2021-05-09 22:15:00+00:00',
+                         '2021-05-09 22:20:00+00:00',
+                         '2021-05-09 22:25:00+00:00',
+
+                         '2022-05-09 22:00:00+00:00',
+                         '2022-05-09 22:05:00+00:00',
+                         '2022-05-09 22:10:00+00:00',
+                         '2022-05-09 22:15:00+00:00',
+                         '2022-05-09 22:20:00+00:00',
+                         '2022-05-09 22:25:00+00:00'
+                         ]
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
+
+    # def test_generate_multiple_next_8(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     cron = '30 9 L-2 * ? *'
+    #     expected_list = ['2020-05-29 09:30:00+00:00',
+    #                      '2020-06-28 09:30:00+00:00',
+    #                      '2020-07-29 09:30:00+00:00',
+    #                      '2020-08-28 09:30:00+00:00',
+    #                      '2020-09-29 09:30:00+00:00',
+    #                      '2020-10-28 09:30:00+00:00',
+    #                      '2020-11-29 09:30:00+00:00'
+    #                      ]
+    #     cron = AWSCron(cron)
+    #     dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
+    #     results = []
+    #     for expected in expected_list:
+    #         print(f"Input {cron}, occurrence: {dt}")
+    #         dt = cron.occurrence(dt).next()
+    #         results.append(str(dt))
+    #         print(f"Result: {dt}\tExpected: {expected}\n")
+    #         self.assertEqual(expected, str(dt))
+
