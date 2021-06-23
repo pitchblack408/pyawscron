@@ -84,12 +84,22 @@ class AWSCron:
           new_rule = str(min) + "-" + str(max)
         elif '/' in rule:
             parts = rule.split('/')
+            start = None
+            end = None
             if parts[0] == '*':
-                parts[0] = str(min)
-            start = int(parts[0])
+                start = min
+                end = max
+                # parts[0] = str(min)
+            elif '-' in parts[0]:
+                splits = parts[0].split('-')
+                start = int(splits[0])
+                end = int(splits[1])
+            else:
+                start = int(parts[0])
+                end = max
             increment = int(parts[1])
             new_rule = ''
-            while start <= max:
+            while start <= end:
                 new_rule += "," + str(start)
                 start += increment
             new_rule = new_rule[1:]
@@ -101,7 +111,7 @@ class AWSCron:
                 parts = s.split('-');
                 start = int(parts[0])
                 end = int(parts[1])
-                for i in range(start,end + 1,1):
+                for i in range(start, end + 1, 1):
                     allows.append(i)
             else:
                 allows.append(int(s))
