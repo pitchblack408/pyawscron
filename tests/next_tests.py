@@ -166,8 +166,8 @@ class NextTestCase(unittest.TestCase):
 
 
     def test_generate_multiple_next_8(self):
-        """
-
+        """Tests Last day of month
+           L-2 =
         :return:
         """
         cron = '30 9 L-2 * ? *'
