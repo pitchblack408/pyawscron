@@ -4,11 +4,8 @@ A python port from a typescript project.
 https://github.com/beemhq/aws-cron-parser
 
 # Work in progess
-Currently, parsing test cases pass and some of the next_tests passes:
-* test_generate_multiple_next_occurences1
-* test_generate_multiple_next_occurences2
-* test_generate_multiple_next_occurences3
-
+Currently, parsing test cases and next_tests pass, but there maybe be some additional test cases needed.
+Need to validate the W wildcard in the Day-of-month field use case.
 
 ## [AWS Cron Expressions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)
 ### cron(fields)
