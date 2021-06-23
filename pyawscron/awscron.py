@@ -42,8 +42,8 @@ class AWSCron:
         self.__parse()
 
     def occurrence(self, utc_datetime):
-        if utc_datetime.tzinfo == None or utc_datetime.tzinfo != datetime.timezone.utc:
-            raise Exception("Occurance utc_datetime must have tzinfo == datetime.timezone.utc")
+        if utc_datetime.tzinfo is None or utc_datetime.tzinfo != datetime.timezone.utc:
+            raise Exception("Occurrence utc_datetime must have tzinfo == datetime.timezone.utc")
         return Occurrence(self, utc_datetime)
 
     def __str__(self):

@@ -29,7 +29,8 @@ class ParseCronTestCase(unittest.TestCase):
         should parse AWS cron expressions #1
         """
         expected = {"minutes": [6], "hours": [4, 7, 10, 13, 16, 19, 22],
-                    "daysOfMonth": [8, 18, 19, 20, 26, 27, 28], "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                    "daysOfMonth": [8, 18, 19, 20, 26, 27, 28],
+                    "months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                     "daysOfWeek": [], "years": [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]}
         cron_str = '6 4/3 8,18-20,26-28 * ? 2020-2030'
         cron_obj = AWSCron(cron_str)
@@ -174,7 +175,7 @@ class ParseCronTestCase(unittest.TestCase):
 
     def test_cron_expressions8(self):
         """
-        should parse AWS cron expressions #7
+        should parse AWS cron expressions #8
         """
         expected = {"minutes": [30],
                     "hours": [9],

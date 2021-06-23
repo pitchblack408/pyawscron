@@ -40,7 +40,7 @@ class Occurrence():
         if len(p_days_of_month) == 0:
             p_days_of_month = Commons.get_days_of_month_from_days_of_week(year, month, parsed.days_of_week)
         elif p_days_of_month[0] == 'L':
-            p_days_of_month = Commons.get_days_of_month_for_L(year, month)
+            p_days_of_month = Commons.get_days_of_month_for_L(year, month, int(p_days_of_month[1]))
         elif p_days_of_month[0] == 'W':
             p_days_of_month = Commons.get_days_of_month_for_W(year, month, p_days_of_month[1])
 
@@ -67,7 +67,5 @@ class Occurrence():
     def next(self):
         self.iter = 0
         from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) + 1) * 60000
-        if from_epoch == 1607379060000:
-            print("")
         dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
         return self.__find_once(self.cron, dt)
