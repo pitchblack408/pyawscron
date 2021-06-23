@@ -1,6 +1,5 @@
 import datetime
 from dateutil.relativedelta import relativedelta
-from calendar import monthrange
 
 def get_days_of_month_for_L(year=2020, month=6, days_before=2):
     for i in range(31, 28 - 1, -1):
