@@ -70,11 +70,13 @@ class AWSCron:
         if rule == '?':
             return []
         if rule == 'L':
-            return ['L']
+            return ['L', 0]
+        if rule.startswith('L-'):
+            return ['L', int(rule[2:])]
         if rule.endswith('L'):
-            return ['L', int(rule[0: len(rule) - 1])]
+            return ['L', int(rule[0:-1])]
         if rule.endswith('W'):
-          return ['W', int(rule[0: rule.length - 1])]
+            return ['W', int(rule[0:-1])]
         if '#' in rule:
             return ['#', int(rule.split('#')[0]), int(rule.split('#')[1])]
 
@@ -89,7 +91,6 @@ class AWSCron:
             if parts[0] == '*':
                 start = min
                 end = max
-                # parts[0] = str(min)
             elif '-' in parts[0]:
                 splits = parts[0].split('-')
                 start = int(splits[0])
