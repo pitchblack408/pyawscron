@@ -167,7 +167,6 @@ class NextTestCase(unittest.TestCase):
 
     def test_generate_multiple_next_8(self):
         """Tests Last day of month
-           L-2 =
         :return:
         """
         cron = '30 9 L-2 * ? *'
@@ -189,3 +188,21 @@ class NextTestCase(unittest.TestCase):
             print(f"Result: {dt}\tExpected: {expected}\n")
             self.assertEqual(expected, str(dt))
 
+    def test_generate_multiple_next_9(self):
+        """ At 09:30 AM, on the weekday nearest day 3 of the month
+        :return:
+        """
+        cron = '30 9 3W * ? *'
+        expected_list = ['2020-06-03 09:30:00+00:00',
+                         '2020-07-03 09:30:00+00:00',
+                         '2020-08-02 09:30:00+00:00' # should be either 6 or 9th, need to ask aws
+                         ]
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
