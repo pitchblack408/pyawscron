@@ -193,12 +193,13 @@ class NextTestCase(unittest.TestCase):
         :return:
         """
         cron = '30 9 3W * ? *'
-        expected_list = ['2020-06-03 09:30:00+00:00',
-                         '2020-07-03 09:30:00+00:00',
-                         '2020-08-02 09:30:00+00:00' # should be either 6 or 9th, need to ask aws
+        expected_list = ['2020-08-03 09:30:00+00:00',
+                         '2020-09-03 09:30:00+00:00',
+                         '2020-10-02 09:30:00+00:00'
                          ]
+
         cron = AWSCron(cron)
-        dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        dt = datetime.datetime(2020, 7, 31, 22, 30, 57, tzinfo=datetime.timezone.utc)
         results = []
         for expected in expected_list:
             print(f"Input {cron}, occurrence: {dt}")
