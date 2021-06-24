@@ -17,6 +17,13 @@ class NextTestCase(unittest.TestCase):
         pass
 
     def test_generate_multiple_next_occurences1(self):
+        """At 23, 24, and 25 minutes past the hour, at 05:00 PM and 06:00 PM,
+           on day 25 of the month, every 4 months, March through December,
+           only in 2020, 2021, 2023, and 2028
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+           / ==>> This character is used to specify increments.
+        :return:
+        """
         cron = '23,24,25 17,18 25 MAR/4 ? 2020,2021,2023,2028'
         expected_list= ['2020-07-25 17:23:00+00:00',
                         '2020-07-25 17:24:00+00:00',
@@ -43,8 +50,9 @@ class NextTestCase(unittest.TestCase):
 
 
     def test_generate_multiple_next_occurences2(self):
-        """
-
+        """At 10:15 AM, on the last Friday of the month, 2002 through 2025
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+           L ==>> This character is used to specify last day of the month or week
         :return:
         """
         cron = '15 10 ? * 6L 2002-2025'
@@ -71,8 +79,8 @@ class NextTestCase(unittest.TestCase):
             self.assertEqual(expected, str(dt))
 
     def test_generate_multiple_next_occurences3(self):
-        """
-
+        """Every 3 hours
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
         :return:
         """
         cron = '0 */3 */1 * ? *'
@@ -92,8 +100,8 @@ class NextTestCase(unittest.TestCase):
             self.assertEqual(expected, str(dt))
 
     def test_generate_multiple_next_occurences4(self):
-        """
-
+        """At 12:15 PM, only on Sunday and Monday
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
         :return:
         """
         cron = '15 12 ? * sun,mon *'
@@ -113,8 +121,10 @@ class NextTestCase(unittest.TestCase):
             self.assertEqual(expected, str(dt))
 
     def test_generate_multiple_next_6(self):
-        """
-
+        """At 10 minutes past the hour, every 5 hours, starting at 07:00 AM, on day 7 of the month,
+           only in 2020 and 2021
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+           / ==>> This character is used to specify increments.
         :return:
         """
         cron = '10 7/5 7 * ? 2020,2021'
@@ -136,8 +146,11 @@ class NextTestCase(unittest.TestCase):
 
 # Good test for parsing as well
     def test_generate_multiple_next_7(self):
-        """
-
+        """Every minute between 10:00 PM and 10:/5 PM, on day 09 of the month, only in May,
+           only in 2020, 2021, and 2022
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+           / ==>> This character is used to specify increments.
+           - ==>> This character is used to specifies ranges.
         :return:
         """
         cron = '0-29/5 22 09 05 ? 2020,2021,2022'
@@ -166,7 +179,10 @@ class NextTestCase(unittest.TestCase):
 
 
     def test_generate_multiple_next_8(self):
-        """Tests Last day of month
+        """At 09:30 AM, between day L and 2 of the month
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+           L ==>> This character is used to specify last day of the month or week
+           - ==>> This character is used to specifies ranges.
         :return:
         """
         cron = '30 9 L-2 * ? *'
@@ -190,6 +206,8 @@ class NextTestCase(unittest.TestCase):
 
     def test_generate_multiple_next_9(self):
         """ At 09:30 AM, on the weekday nearest day 3 of the month
+            cron(Minutes Hours Day-of-month Month Day-of-week Year)
+            W ==>>This character is used to specify the weekday (Monday-Friday) nearest the given day.
         :return:
         """
         cron = '30 9 3W * ? *'
@@ -200,6 +218,26 @@ class NextTestCase(unittest.TestCase):
 
         cron = AWSCron(cron)
         dt = datetime.datetime(2020, 7, 31, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
+
+    def test_generate_multiple_next_10(self):
+        """ At 09:30 AM, on the weekday nearest day 3 of the month
+            cron(Minutes Hours Day-of-month Month Day-of-week Year)
+            W ==>>This character is used to specify the weekday (Monday-Friday) nearest the given day.
+        :return:
+        """
+        cron = '30 9 3W * ? *'
+        expected_list = ['2020-05-04 09:30:00+00:00']
+
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 4, 30, 22, 30, 57, tzinfo=datetime.timezone.utc)
         results = []
         for expected in expected_list:
             print(f"Input {cron}, occurrence: {dt}")
