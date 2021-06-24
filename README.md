@@ -4,8 +4,7 @@ A python port from a typescript project.
 https://github.com/beemhq/aws-cron-parser
 
 # Work in progess
-Currently, parsing test cases and next_tests pass, but there maybe be some additional test cases needed.
-Need to validate the W wildcard in the Day-of-month field use case.
+Need to implement the prev method in occurance.py 
 
 ## [AWS Cron Expressions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)
 ### cron(fields)
@@ -101,8 +100,8 @@ Need to validate the W wildcard in the Day-of-month field use case.
 
 ## Methods Implemented:
 
-    cron = '23,24,25 17,18 25 MAR/4 ? 2020,2021,2023,2028'
-    cron = AWSCron(cron)
+    cron_str = '23,24,25 17,18 25 MAR/4 ? 2020,2021,2023,2028'
+    cron = AWSCron(cron_str)
     dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
     dt = cron.occurance(dt).next()
  

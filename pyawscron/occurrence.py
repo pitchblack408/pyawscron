@@ -42,7 +42,7 @@ class Occurrence():
         elif p_days_of_month[0] == 'L':
             p_days_of_month = Commons.get_days_of_month_for_L(year, month, int(p_days_of_month[1]))
         elif p_days_of_month[0] == 'W':
-            p_days_of_month = Commons.get_days_of_month_for_W(year, month, p_days_of_month[1])
+            p_days_of_month = Commons.get_days_of_month_for_W(year, month, int(p_days_of_month[1]))
 
         day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
         if not day_of_month:
@@ -65,7 +65,19 @@ class Occurrence():
 
 
     def next(self):
+        """Generate the next after the occurrence date value
+
+        :return:
+        """
         self.iter = 0
         from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) + 1) * 60000
         dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
         return self.__find_once(self.cron, dt)
+
+    # TODO implement prev method
+    def prev(self):
+        """Generate the prev before the occurrence date value
+
+        :return:
+        """
+        raise NotImplemented("The prev method has not been implemented.")
