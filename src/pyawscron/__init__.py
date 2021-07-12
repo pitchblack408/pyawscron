@@ -1,1 +1,1 @@
-from awscron import AWSCron
+from .awscron import AWSCron
