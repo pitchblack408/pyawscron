@@ -1,8 +1,6 @@
 import math
 import datetime
-from datetime import tzinfo
 from .commons import Commons
-import time
 from dateutil.relativedelta import relativedelta
 
 class Occurrence():
