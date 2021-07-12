@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from pyawscron.awscron import AWSCron
+from src.pyawscron import AWSCron
 
 
 class ParseCronTestCase(unittest.TestCase):
