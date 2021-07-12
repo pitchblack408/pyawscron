@@ -3,8 +3,7 @@
 
 import unittest
 import datetime
-from datetime import timezone
-from pyawscron.awscron import AWSCron
+from src.pyawscron import AWSCron
 
 class NextTestCase(unittest.TestCase):
 
