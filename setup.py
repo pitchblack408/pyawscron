@@ -1,14 +1,14 @@
 import setuptools
 
-with open("src/pyawscron/VERSION", "r", encoding="utf-8") as fh:
-    version = fh.read()
+with open("VERSION", "r", encoding="utf-8") as fh:
+    app_version = fh.read()
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="pyawscron-pitchblack408",
-    version=version,
+    version=app_version,
     author="Michael Martin",
     author_email="pitchblack408@gmail.com",
     description="An AWS Cron Parser",
