@@ -9,7 +9,7 @@ version = (
 )
 
 assert "." in version
-with open("pyawscron/VERSION", "w", encoding="utf-8") as fh:
+with open("src/pyawscron/VERSION", "w", encoding="utf-8") as fh:
     fh.write(f"{version}\n")
 
 with open("README.md", "r", encoding="utf-8") as fh:
