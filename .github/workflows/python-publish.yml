@@ -28,7 +28,6 @@ jobs:
       - name: Build package
         run: |
           echo "__version__ = '$(git describe --tags)'" > src/pyawscron/version.py
-          chmod 644 VERSION
           python -m build
 #      - name: Publish package to TestPyPI
 #        uses: pypa/gh-action-pypi-publish@release/v1
