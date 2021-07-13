@@ -3,6 +3,11 @@ import setuptools
 with open("VERSION", "r", encoding="utf-8") as fh:
     app_version = fh.read()
 
+try:
+    assert "." in app_version
+except AssertionError:
+    raise AssertionError("Failed to obtain version.")
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
