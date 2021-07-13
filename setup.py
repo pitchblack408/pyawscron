@@ -9,6 +9,7 @@ version = (
 )
 print(f"App Version: {version}")
 assert "." in version
+
 with open("src/pyawscron/VERSION", "w", encoding="utf-8") as fh:
     fh.write(f"{version}\n")
 
