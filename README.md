@@ -18,7 +18,7 @@ https://github.com/beemhq/aws-cron-parser
 Need to implement the prev method in occurance.py 
 
 # Install
-    pip install pyawscron-pitchblack408
+    pip install pyawscron
 
 ## [AWS Cron Expressions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)
 ### cron(fields)
