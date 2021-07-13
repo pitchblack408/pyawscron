@@ -1,10 +1,13 @@
 import setuptools
+import os
 
-with open("VERSION", "r", encoding="utf-8") as fh:
-    app_version = fh.read()
+
+version = {}
+with open(os.path.abspath("src"+os.path.sep+"pyawscron"+os.path.sep+"version.py")) as fp:
+    exec(fp.read(), version)
 
 try:
-    assert "." in app_version
+    assert "." in version['__version__']
 except AssertionError:
     raise AssertionError("Failed to obtain version.")
 
@@ -13,7 +16,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pyawscron-pitchblack408",
-    version=app_version,
+    version=version['__version__'],
     author="Michael Martin",
     author_email="pitchblack408@gmail.com",
     description="An AWS Cron Parser",

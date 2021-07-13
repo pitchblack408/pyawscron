@@ -27,7 +27,7 @@ jobs:
           pip install build
       - name: Build package
         run: |
-          git describe --tags > VERSION
+          echo "__version__ = '$(git describe --tags)'" > src/pyawscron/version.py
           chmod 644 VERSION
           python -m build
 #      - name: Publish package to TestPyPI
