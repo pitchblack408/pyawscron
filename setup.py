@@ -1,17 +1,7 @@
 import setuptools
-import subprocess
 
-
-version = (
-    subprocess.run(["git", "describe", "--tags"], stdout=subprocess.PIPE)
-        .stdout.decode("utf-8")
-        .strip()
-)
-print(f"App Version: {version}")
-assert "." in version
-
-with open("src/pyawscron/VERSION", "w", encoding="utf-8") as fh:
-    fh.write(f"{version}\n")
+with open("src/pyawscron/VERSION", "r", encoding="utf-8") as fh:
+    version = fh.read()
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
