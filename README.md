@@ -1,3 +1,14 @@
+**Main Branch Status**
+
+![](https://github.com/pitchblack408/pyawscron/actions/workflows/python-pyawscron.yml/badge.svg?branch=main)
+
+**Develop Branch Status**
+
+![](https://github.com/pitchblack408/pyawscron/actions/workflows/python-pyawscron.yml/badge.svg?branch=develop)
+
+
+
+
 # pyawscron
 
 A python port from a typescript project.
@@ -5,6 +16,9 @@ https://github.com/beemhq/aws-cron-parser
 
 # Work in progess
 Need to implement the prev method in occurance.py 
+
+# Install
+    pip install pyawscron-pitchblack408
 
 ## [AWS Cron Expressions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions)
 ### cron(fields)
