@@ -1,11 +1,23 @@
 import setuptools
+import subprocess
+import os
+
+version = (
+    subprocess.run(["git", "describe", "--tags"], stdout=subprocess.PIPE)
+        .stdout.decode("utf-8")
+        .strip()
+)
+
+assert "." in version
+with open("pyawscron/VERSION", "w", encoding="utf-8") as fh:
+    fh.write(f"{version}\n")
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="pyawscron-pitchblack408",
-    version="0.0.3",
+    version=version,
     author="Michael Martin",
     author_email="pitchblack408@gmail.com",
     description="An AWS Cron Parser",
