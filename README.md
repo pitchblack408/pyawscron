@@ -1,3 +1,7 @@
+![Main Branch Status](https://github.com/pitchblack408/pyawscron/actions/workflows/python-pyawscron.yml/badge.svg?branch=main)
+
+![Develop Branch Status](https://github.com/pitchblack408/pyawscron/actions/workflows/python-pyawscron.yml/badge.svg?branch=main)
+
 # pyawscron
 
 A python port from a typescript project.
