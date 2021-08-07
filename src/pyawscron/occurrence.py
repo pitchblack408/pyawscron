@@ -72,10 +72,29 @@ class Occurrence():
         dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
         return self.__find_once(self.cron, dt)
 
-    # TODO implement prev method
+
     def prev(self):
         """Generate the prev before the occurrence date value
 
         :return:
+
+        Logic to get previous datetime....
+        1. Get next two occurrences, and subtract them to get difference between them.
+        2. The prev will then be first_next_dtime - difference_calculated
+        3. return prev
+        
         """
-        raise NotImplemented("The prev method has not been implemented.")
+        # Converting the datetime to seconds and subtracting one from it.
+        from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) - 1) * 60000
+        dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
+        # Get next two occurrences first_next_dtime and second_next_dtime
+        self.utc_datetime = dt
+        first_next_dtime = self.next()
+        self.utc_datetime = first_next_dtime
+        second_next_dtime = self.next()
+        # Get prev, by subtracting difference from first_next_dtime
+        prev_dtime =  first_next_dtime - (second_next_dtime - first_next_dtime)
+        return prev_dtime
+
+
+
