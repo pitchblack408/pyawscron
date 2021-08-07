@@ -123,6 +123,58 @@ Need to implement the prev method in occurance.py
  
     '2020-07-25 17:23:00+00:00',
     
-    
+
+
+### Additional methods added `get_all_schedule_bw_dates`  and  `get_next_n_schedule`.
+
+These methods are very useful while using AWS cron schedule. 
+
+For example... 
+
+1. When we need to verify all executions of some lambda function or something else 
+   on AWS based on a cron schedule between some date , we can use `get_all_schedule_bw_dates` 
+   and compare whether the execution was done or not.
+
+   ```
+   from_dt = datetime.datetime(2021, 8, 7, 8, 30, 57, tzinfo=datetime.timezone.utc)
+   to_date = datetime.datetime(2021, 8, 7, 11, 30, 57, tzinfo=datetime.timezone.utc)
+
+   AWSCron.get_all_schedule_bw_dates(from_dt, to_date, '0/23 * * * ? *')
+
+   # Outputs
+
+   [datetime.datetime(2021, 8, 7, 8, 46, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 9, 0, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 9, 23, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 9, 46, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 10, 0, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 10, 23, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 10, 46, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 11, 0, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 11, 23, tzinfo=datetime.timezone.utc)]
+   ```
+
+2. Sometimes we have to predict next few(say 5) executions based on a cron pattern. 
+   In this case we can use `get_next_n_schedule` and pass n according to our requirements.
+
+   ```
+   from_dt = datetime.datetime(2021, 8, 7, 8, 30, 57, tzinfo=datetime.timezone.utc)
+
+   AWSCron.get_next_n_schedule(10, from_dt, '0/23 * * * ? *')
+
+   #Outputs
+   [datetime.datetime(2021, 8, 7, 8, 46, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 9, 0, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 9, 23, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 9, 46, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 10, 0, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 10, 23, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 10, 46, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 11, 0, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 11, 23, tzinfo=datetime.timezone.utc),
+   datetime.datetime(2021, 8, 7, 11, 46, tzinfo=datetime.timezone.utc)]
+
+   ```
+
     
     
