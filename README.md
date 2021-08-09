@@ -123,6 +123,30 @@ Need to implement the prev method in occurance.py
  
     '2020-07-25 17:23:00+00:00',
     
+
+
+### Full Example
+
+    from pyawscron import AWSCron
+    import datetime
+    import calendar
     
+    def main():
+    
+        aws_cron = AWSCron("0 5 4 * ? *")
+        today = datetime.datetime.utcnow().date()
+        start_date = datetime.datetime(today.year, today.month, 1, tzinfo=datetime.timezone.utc)
+        last_day = calendar.monthrange(today.year, today.month)[1]
+        end_date = datetime.datetime(today.year, today.month, last_day, tzinfo=datetime.timezone.utc)
+        dt=start_date
+        while True:
+            dt = aws_cron.occurrence(dt).next()
+            if dt > end_date:
+                break
+            print(dt)
+    
+    
+    if __name__ == "__main__":
+    main()
     
     
