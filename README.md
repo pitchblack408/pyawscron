@@ -117,7 +117,7 @@ Need to implement the prev method in occurance.py
     cron_str = '23,24,25 17,18 25 MAR/4 ? 2020,2021,2023,2028'
     cron = AWSCron(cron_str)
     dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
-    dt = cron.occurance(dt).next()
+    dt = cron.occurrence(dt).next()
  
  Result
  
@@ -125,7 +125,7 @@ Need to implement the prev method in occurance.py
     
 
 
-### Full Example
+### Iterative Example
 
     from pyawscron import AWSCron
     import datetime
