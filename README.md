@@ -138,7 +138,7 @@ Need to implement the prev method in occurance.py
     
 ## Helper Methods
 ### get_all_schedule_bw_dates
-Returns a list of UTC datetime objects using a start and end date. The end date is not inclusive.
+Returns a list of UTC datetime objects using a start and end date. The end date has a flag to be inclusive or exclusive.
 
 **Note:** This method has no upper limit on how many datetime object can be returned. Use Iterative approach or get_next_n_schedule if memory becomes an issue.
 
