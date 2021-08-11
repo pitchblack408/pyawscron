@@ -117,3 +117,83 @@ class AWSCron:
             else:
                 allows.append(int(s))
         return allows
+
+
+    @staticmethod
+    def get_next_n_schedule(n, from_date, cron):
+        schedule_list = list()
+        if not isinstance(from_date, datetime.datetime):
+            raise ValueError("Invalid from_date. Must be of type datetime.dateime" \
+                             " and have tzinfo = datetime.timezone.utc")
+        else:
+            cron_iterator = AWSCron(cron)
+            for i in range(n):
+                from_date = cron_iterator.occurrence(from_date).next()
+                schedule_list.append(from_date)
+
+            return schedule_list
+
+
+    @staticmethod
+    def get_prev_n_schedule(n, from_date, cron):
+        raise NotImplemented("WIP..")
+
+
+    @staticmethod
+    def get_all_schedule_bw_dates(from_date, to_date, cron, exclude_ends=False):
+        """
+        Get all datetimes from from_date to to_date matching the given cron expression.
+        If the cron expression matches either 'from_date' and/or 'to_date', 
+        those times will be returned as well unless 'exclude_ends=True' is passed.
+
+        You can think of this function as sibling to the builtin range function for datetime objects.
+        Like range(start,stop,step), except that here 'step' is a cron expression.
+
+        Args:
+            from_date ([datetime]): 
+                    A datetime object from where the schedule will start with tzinfo in utc.
+
+            to_date ([datetime]):
+                    A datetime object to where the schedule will end with tzinfo in utc.
+
+            cron ([str]):
+                    A valid AWS cron expression
+    
+            exclude_ends (bool, optional): 
+                    Whether to exclude end or not.
+                    Defaults to False.
+
+        Returns:
+            A list of datetime that occur in between from_date and to_date based on cron schedule.
+        """
+        if ( type(from_date) != type(to_date) and not 
+            (isinstance(from_date, type(to_date)) or
+            isinstance(to_date, type(from_date)))
+        ):
+            raise ValueError("The from_date and to_date must be same type." \
+                             "  {0} != {1}".format(type(from_date), type(to_date)))
+        
+        elif (not isinstance(from_date, datetime.datetime) or 
+            (from_date.tzinfo != datetime.timezone.utc)):
+            raise ValueError("Invalid from_date and to_date. Must be of type datetime.dateime" \
+                             " and have tzinfo = datetime.timezone.utc")
+        else:
+            schedule_list = []
+            cron_iterator = AWSCron(cron)
+            start = from_date.replace(second=0, microsecond=0) - datetime.timedelta(seconds=1)
+            stop = to_date.replace(second=0, microsecond=0)
+
+            while start <= stop:
+                start = cron_iterator.occurrence(start).next()
+                if start > stop:
+                    break
+                schedule_list.append(start)
+
+            # If exclude_ends=True , 
+            # remove first & last element from the list if they match from_date & to_date
+            if exclude_ends:
+                if schedule_list[0] == from_date.replace(second=0,microsecond=0):
+                    schedule_list.pop(0)
+                if schedule_list[-1] == to_date.replace(second=0, microsecond=0):
+                    schedule_list.pop()
+            return schedule_list
