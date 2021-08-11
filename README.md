@@ -112,20 +112,7 @@ Need to implement the prev method in occurance.py
 
 
 
-## Methods Implemented:
-
-    cron_str = '23,24,25 17,18 25 MAR/4 ? 2020,2021,2023,2028'
-    cron = AWSCron(cron_str)
-    dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
-    dt = cron.occurrence(dt).next()
- 
- Result
- 
-    '2020-07-25 17:23:00+00:00',
-    
-
-
-### Iterative Example
+# Iterative Use
 
     from pyawscron import AWSCron
     import datetime
@@ -149,4 +136,48 @@ Need to implement the prev method in occurance.py
     if __name__ == "__main__":
     main()
     
-    
+## Helper Methods
+### get_all_schedule_bw_dates
+Returns a list of UTC datetime objects using a start and end date. The end date has a flag to be inclusive or exclusive.
+
+**Note:** This method has no upper limit on how many datetime object can be returned. Use Iterative approach or get_next_n_schedule if memory becomes an issue.
+
+```
+from_dt = datetime.datetime(2021, 8, 7, 8, 30, 57, tzinfo=datetime.timezone.utc)
+to_date = datetime.datetime(2021, 8, 7, 11, 30, 57, tzinfo=datetime.timezone.utc)
+
+AWSCron.get_all_schedule_bw_dates(from_dt, to_date, '0/23 * * * ? *')
+
+# Resulting list
+[datetime.datetime(2021, 8, 7, 8, 46, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 9, 0, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 9, 23, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 9, 46, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 10, 0, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 10, 23, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 10, 46, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 11, 0, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 11, 23, tzinfo=datetime.timezone.utc)]
+   ```
+### get_next_n_schedule
+Returns a list with the n next datetimes that match the aws cron expression from the provided start date.
+
+```
+from_dt = datetime.datetime(2021, 8, 7, 8, 30, 57, tzinfo=datetime.timezone.utc)
+
+AWSCron.get_next_n_schedule(10, from_dt, '0/23 * * * ? *')
+
+# Resulting list
+[datetime.datetime(2021, 8, 7, 8, 46, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 9, 0, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 9, 23, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 9, 46, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 10, 0, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 10, 23, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 10, 46, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 11, 0, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 11, 23, tzinfo=datetime.timezone.utc),
+datetime.datetime(2021, 8, 7, 11, 46, tzinfo=datetime.timezone.utc)]
+
+```
+
