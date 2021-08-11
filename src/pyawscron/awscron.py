@@ -121,6 +121,14 @@ class AWSCron:
 
     @staticmethod
     def get_next_n_schedule(n, from_date, cron):
+        """
+        Returns a list with the n next datetime(s) that match the aws cron expression from the provided start date.
+
+        :param n: Int of the n next datetime(s)
+        :param from_date: datetime with the start date
+        :param cron: str of aws cron to be parsed
+        :return: list of datetime objects
+        """
         schedule_list = list()
         if not isinstance(from_date, datetime.datetime):
             raise ValueError("Invalid from_date. Must be of type datetime.dateime" \
@@ -138,34 +146,20 @@ class AWSCron:
     def get_prev_n_schedule(n, from_date, cron):
         raise NotImplemented("WIP..")
 
-
     @staticmethod
     def get_all_schedule_bw_dates(from_date, to_date, cron, exclude_ends=False):
         """
         Get all datetimes from from_date to to_date matching the given cron expression.
-        If the cron expression matches either 'from_date' and/or 'to_date', 
+        If the cron expression matches either 'from_date' and/or 'to_date',
         those times will be returned as well unless 'exclude_ends=True' is passed.
 
-        You can think of this function as sibling to the builtin range function for datetime objects.
-        Like range(start,stop,step), except that here 'step' is a cron expression.
-
-        Args:
-            from_date ([datetime]): 
-                    A datetime object from where the schedule will start with tzinfo in utc.
-
-            to_date ([datetime]):
-                    A datetime object to where the schedule will end with tzinfo in utc.
-
-            cron ([str]):
-                    A valid AWS cron expression
-    
-            exclude_ends (bool, optional): 
-                    Whether to exclude end or not.
-                    Defaults to False.
-
-        Returns:
-            A list of datetime that occur in between from_date and to_date based on cron schedule.
+        :param from_date: datetime object from where the schedule will start with tzinfo in utc.
+        :param to_date: datetime object to where the schedule will end with tzinfo in utc.
+        :param cron: str of aws cron to be parsed
+        :param exclude_ends: bool defaulted to false to not exclude the end date
+        :return: list of datetime objects
         """
+
         if ( type(from_date) != type(to_date) and not 
             (isinstance(from_date, type(to_date)) or
             isinstance(to_date, type(from_date)))
