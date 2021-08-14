@@ -27,6 +27,20 @@ class Commons:
                 return i
         return None
 
+
+    @staticmethod
+    def array_find_last(sequence, function):
+        """
+        Static method c <= (current_minute if is_same_date and hour == current_hour else 0)
+        """
+        # Using reversed as an iterator to give an iterator to iterate upon 
+        # instead of fully reversing the list that will utilize lot of space.
+        for seq in reversed(sequence):
+            if function(seq) == True:
+                return seq
+        return None
+
+
     @staticmethod
     def get_days_of_month_from_days_of_week(year, month, days_of_week):
         days_of_month = []
