@@ -62,6 +62,55 @@ class Occurrence():
         return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=datetime.timezone.utc)
 
 
+    def __find_prev_once(self, parsed, datetime_from : datetime):
+        if self.iter > 10:
+            raise Exception("AwsCronParser : this shouldn't happen, but iter > 10")
+        self.iter += 1
+        current_year = datetime_from.year
+        current_month = datetime_from.month
+        current_day_of_month = datetime_from.day
+        current_hour = datetime_from.hour
+        current_minute = datetime_from.minute
+
+        year = Commons.array_find_last(parsed.years, lambda c: c <= current_year)
+        if year is None:
+            return None
+
+        month = Commons.array_find_last(parsed.months, lambda c: c <= (current_month if year == current_year else 12))
+        if not month:
+            dt = datetime.datetime(year, 1, 1, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            return self.__find_prev_once(parsed, dt)
+
+        is_same_month = True if year == current_year and month == current_month else False
+
+        p_days_of_month = parsed.days_of_month
+        if len(p_days_of_month) == 0:
+            p_days_of_month = Commons.get_days_of_month_from_days_of_week(year, month, parsed.days_of_week)
+        elif p_days_of_month[0] == 'L':
+            p_days_of_month = Commons.get_days_of_month_for_L(year, month, int(p_days_of_month[1]))
+        elif p_days_of_month[0] == 'W':
+            p_days_of_month = Commons.get_days_of_month_for_W(year, month, int(p_days_of_month[1]))
+
+        day_of_month = Commons.array_find_last(p_days_of_month, lambda c:  c <= (current_day_of_month if is_same_month else 31))
+        if not day_of_month:
+            dt = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            return self.__find_prev_once(parsed, dt)
+
+        is_same_date = is_same_month and day_of_month == current_day_of_month
+
+        hour = Commons.array_find_last(parsed.hours, lambda c:  c <= (current_hour if is_same_date else 23))
+        if hour is None:
+            dt = datetime.datetime(year, month, day_of_month, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            return self.__find_prev_once(parsed, dt)
+
+        minute = Commons.array_find_last(parsed.minutes, lambda c: c <= (current_minute if is_same_date and hour == current_hour else 59))
+        if minute is None:
+            dt = datetime.datetime(year, month, day_of_month, hour, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            return self.__find_prev_once(parsed, dt)
+
+        return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=datetime.timezone.utc)
+
+
     def next(self):
         """Generate the next after the occurrence date value
 
@@ -72,10 +121,13 @@ class Occurrence():
         dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
         return self.__find_once(self.cron, dt)
 
-    # TODO implement prev method
+
     def prev(self):
         """Generate the prev before the occurrence date value
 
         :return:
         """
-        raise NotImplemented("The prev method has not been implemented.")
+        self.iter = 0
+        from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) - 1) * 60000
+        dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
+        return self.__find_prev_once(self.cron, dt)
