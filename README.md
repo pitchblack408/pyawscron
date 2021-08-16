@@ -12,6 +12,7 @@
 # pyawscron
 
 A python port from a typescript project.
+
 https://github.com/beemhq/aws-cron-parser
 
 # Install
@@ -111,6 +112,8 @@ https://github.com/beemhq/aws-cron-parser
 
 # Iterative Use
 
+**next**
+
     from pyawscron import AWSCron
     import datetime
     import calendar
@@ -131,8 +134,30 @@ https://github.com/beemhq/aws-cron-parser
     
     
     if __name__ == "__main__":
-    main()
+        main()
     
+**prev**
+
+    from pyawscron import AWSCron
+    import datetime
+    
+    def main():
+    
+        aws_cron = AWSCron("0 5 4 * ? *")
+        today = datetime.datetime.utcnow().date()
+        start_date = datetime.datetime(today.year, today.month, 1, tzinfo=datetime.timezone.utc)
+        end_date = datetime.datetime(today.year, today.month-1, 1, tzinfo=datetime.timezone.utc)
+        dt=start_date
+        while True:
+            dt = aws_cron.occurrence(dt).prev()
+            if dt < end_date:
+                break
+            print(dt)
+    
+    
+    if __name__ == "__main__":
+        main()
+
 ## Helper Methods
 ### get_all_schedule_bw_dates
 Returns a list of UTC datetime objects using a start and end date. The end date has a flag to be inclusive or exclusive.
