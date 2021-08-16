@@ -144,7 +144,27 @@ class AWSCron:
 
     @staticmethod
     def get_prev_n_schedule(n, from_date, cron):
-        raise NotImplemented("WIP..")
+        """
+        Returns a list with the n prev datetime(s) that match the aws cron expression 
+        from the provided start date.
+
+        :param n: Int of the n next datetime(s)
+        :param from_date: datetime with the start date
+        :param cron: str of aws cron to be parsed
+        :return: list of datetime objects
+        """
+        schedule_list = list()
+        if not isinstance(from_date, datetime.datetime):
+            raise ValueError("Invalid from_date. Must be of type datetime.dateime" \
+                             " and have tzinfo = datetime.timezone.utc")
+        else:
+            cron_iterator = AWSCron(cron)
+            for i in range(n):
+                from_date = cron_iterator.occurrence(from_date).prev()
+                schedule_list.append(from_date)
+
+            return schedule_list
+
 
     @staticmethod
     def get_all_schedule_bw_dates(from_date, to_date, cron, exclude_ends=False):

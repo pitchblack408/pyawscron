@@ -244,3 +244,7 @@ class NextTestCase(unittest.TestCase):
             results.append(str(dt))
             print(f"Result: {dt}\tExpected: {expected}\n")
             self.assertEqual(expected, str(dt))
+
+
+if __name__ == '__main__':
+    unittest.main()
