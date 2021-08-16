@@ -12,10 +12,8 @@
 # pyawscron
 
 A python port from a typescript project.
-https://github.com/beemhq/aws-cron-parser
 
-# Work in progess
-Need to implement the prev method in occurance.py 
+https://github.com/beemhq/aws-cron-parser
 
 # Install
     pip install pyawscron
@@ -114,6 +112,8 @@ Need to implement the prev method in occurance.py
 
 # Iterative Use
 
+**next**
+
     from pyawscron import AWSCron
     import datetime
     import calendar
@@ -134,13 +134,35 @@ Need to implement the prev method in occurance.py
     
     
     if __name__ == "__main__":
-    main()
+        main()
     
+**prev**
+
+    from pyawscron import AWSCron
+    import datetime
+    
+    def main():
+    
+        aws_cron = AWSCron("0 5 4 * ? *")
+        today = datetime.datetime.utcnow().date()
+        start_date = datetime.datetime(today.year, today.month, 1, tzinfo=datetime.timezone.utc)
+        end_date = datetime.datetime(today.year, today.month-1, 1, tzinfo=datetime.timezone.utc)
+        dt=start_date
+        while True:
+            dt = aws_cron.occurrence(dt).prev()
+            if dt < end_date:
+                break
+            print(dt)
+    
+    
+    if __name__ == "__main__":
+        main()
+
 ## Helper Methods
 ### get_all_schedule_bw_dates
 Returns a list of UTC datetime objects using a start and end date. The end date has a flag to be inclusive or exclusive.
 
-**Note:** This method has no upper limit on how many datetime object can be returned. Use Iterative approach or get_next_n_schedule if memory becomes an issue.
+**Note:** This method has no limit on how many datetime object can be returned. Use Iterative approach or get_next_n_schedule if memory becomes an issue.
 
 ```
 from_dt = datetime.datetime(2021, 8, 7, 8, 30, 57, tzinfo=datetime.timezone.utc)
@@ -158,7 +180,7 @@ datetime.datetime(2021, 8, 7, 10, 23, tzinfo=datetime.timezone.utc),
 datetime.datetime(2021, 8, 7, 10, 46, tzinfo=datetime.timezone.utc),
 datetime.datetime(2021, 8, 7, 11, 0, tzinfo=datetime.timezone.utc),
 datetime.datetime(2021, 8, 7, 11, 23, tzinfo=datetime.timezone.utc)]
-   ```
+```
 ### get_next_n_schedule
 Returns a list with the n next datetimes that match the aws cron expression from the provided start date.
 
@@ -178,6 +200,26 @@ datetime.datetime(2021, 8, 7, 10, 46, tzinfo=datetime.timezone.utc),
 datetime.datetime(2021, 8, 7, 11, 0, tzinfo=datetime.timezone.utc),
 datetime.datetime(2021, 8, 7, 11, 23, tzinfo=datetime.timezone.utc),
 datetime.datetime(2021, 8, 7, 11, 46, tzinfo=datetime.timezone.utc)]
+```
+### get_prev_n_schedule
+Returns a list with the n prev datetimes that match the aws cron expression from the provided start date.
 
 ```
+from_dt = datetime.datetime(2021, 8, 7, 11, 50, 57, tzinfo=datetime.timezone.utc)
+
+AWSCron.get_prev_n_schedule(10, from_dt, '0/23 * * * ? *')
+
+# Resulting list
+[datetime.datetime(2021, 8, 7, 11, 46, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 11, 23, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 11, 0, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 10, 46, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 10, 23, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 10, 0, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 9, 46, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 9, 23, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 9, 0, tzinfo=datetime.timezone.utc),
+ datetime.datetime(2021, 8, 7, 8, 46, tzinfo=datetime.timezone.utc)]
+```
+
 
