@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+import datetime
 from src.pyawscron import AWSCron
 
 
@@ -214,6 +215,30 @@ class ParseCronTestCase(unittest.TestCase):
         self.assertEqual(expected["months"], cron_obj.months)
         self.assertEqual(expected["daysOfWeek"], cron_obj.days_of_week)
         self.assertEqual(expected["years"], cron_obj.years)
+
+    def test_cron_expressions10(self):
+        """
+        Tested changes to get_days_of_month_from_days_of_week(), where the year rolls over and the month rolls over into a month that has less than 31 days.
+        """
+        cron_str = '0 9 ? * 2 *'
+        expected_list= ['2022-01-03 09:00:00+00:00',
+                        '2022-01-10 09:00:00+00:00',
+                        '2022-01-17 09:00:00+00:00',
+                        '2022-01-24 09:00:00+00:00',
+                        '2022-01-31 09:00:00+00:00',
+                        '2022-02-07 09:00:00+00:00',
+                        '2022-02-14 09:00:00+00:00',
+                        '2022-02-21 09:00:00+00:00',
+                        '2022-02-28 09:00:00+00:00',
+                        '2022-03-07 09:00:00+00:00'
+                        ]
+        cron = AWSCron(cron_str)
+        dt = datetime.datetime(2021, 12, 31, 21, 0, 0, tzinfo=datetime.timezone.utc)
+        self.print_cron_results(cron_str, cron)                        
+        results = []        
+        for expected in expected_list:
+            dt = cron.occurrence(dt).next()
+            self.assertEqual(expected, str(dt))
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,7 @@
 import datetime
 import time
 from dateutil.relativedelta import relativedelta
+import calendar
 
 class Commons:
 
@@ -45,7 +46,8 @@ class Commons:
     def get_days_of_month_from_days_of_week(year, month, days_of_week):
         days_of_month = []
         index = 0 # only for "#" use case
-        for i in range(1, 31 + 1, 1):
+        no_of_days_in_month = calendar.monthrange(year,month)[1]
+        for i in range(1, no_of_days_in_month + 1, 1):
             this_date = datetime.datetime(year, month, i, tzinfo=datetime.timezone.utc)
             # already after last day of month
             if this_date.month != month:
