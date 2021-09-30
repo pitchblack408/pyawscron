@@ -246,5 +246,105 @@ class NextTestCase(unittest.TestCase):
             self.assertEqual(expected, str(dt))
 
 
+
+    def test_generate_multiple_next_11(self):
+        """ On 4th and 5th minute of every hour for every day for every month and every year
+            Testing if order in the minute affects results when using the wild card ","
+            cron(Minutes Hours Day-of-month Month Day-of-week Year)
+            W ==>>This character is used to specify the weekday (Monday-Friday) nearest the given day.
+        :return:
+        """
+        cron = '5,4 * * * ? *'
+        expected_list = ['2020-04-30 23:04:00+00:00',
+                         '2020-04-30 23:05:00+00:00',
+                         '2020-05-01 00:04:00+00:00',
+                         '2020-05-01 00:05:00+00:00',
+                         '2020-05-01 01:04:00+00:00',
+                         '2020-05-01 01:05:00+00:00',
+                         '2020-05-01 02:04:00+00:00',
+                         '2020-05-01 02:05:00+00:00',
+                         '2020-05-01 03:04:00+00:00',
+                         '2020-05-01 03:05:00+00:00']
+
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 4, 30, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
+
+
+
+    def test_generate_multiple_next_occurences12(self):
+        """At 12:15 PM, only on Sunday and Monday
+           Testing if order in the Month or Day-of-week affects results when using the wild card ","
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+        :return:
+        """
+        cron = '15 12 ? AUG,JUL mon,sun *'
+        expected_list = ['2021-07-04 12:15:00+00:00',
+                         '2021-07-05 12:15:00+00:00',
+                         '2021-07-11 12:15:00+00:00',
+                         '2021-07-12 12:15:00+00:00',
+                         '2021-07-18 12:15:00+00:00',
+                         '2021-07-19 12:15:00+00:00',
+                         '2021-07-25 12:15:00+00:00',
+                         '2021-07-26 12:15:00+00:00',
+                         '2021-08-01 12:15:00+00:00',
+                         '2021-08-02 12:15:00+00:00'
+                         ]
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 12, 7, 15, 57, 37, tzinfo=datetime.timezone.utc)
+        results = []
+        # for x in range(10):
+        #     dt = cron.occurrence(dt).next()
+        #     print(f"Result: {dt}")
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
+
+
+    def test_generate_multiple_next_13(self):
+        """Every minute between 10:00 PM and 10:/5 PM, on day 09 of the month, only in May,
+           only in 2020, 2021, and 2022
+           Testing if order in the Year affects results when using the wild card ","
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+           / ==>> This character is used to specify increments.
+           - ==>> This character is used to specifies ranges.
+        :return:
+        """
+        cron = '0-29/5 22 09 05 ? 2021,2020,2022'
+        expected_list = ['2021-05-09 22:00:00+00:00',
+                         '2021-05-09 22:05:00+00:00',
+                         '2021-05-09 22:10:00+00:00',
+                         '2021-05-09 22:15:00+00:00',
+                         '2021-05-09 22:20:00+00:00',
+                         '2021-05-09 22:25:00+00:00',
+                         '2022-05-09 22:00:00+00:00',
+                         '2022-05-09 22:05:00+00:00',
+                         '2022-05-09 22:10:00+00:00',
+                         '2022-05-09 22:15:00+00:00',
+                         '2022-05-09 22:20:00+00:00',
+                         '2022-05-09 22:25:00+00:00'
+                         ]
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 5, 9, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
+
 if __name__ == '__main__':
     unittest.main()
