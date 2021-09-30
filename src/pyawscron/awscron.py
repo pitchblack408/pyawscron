@@ -81,6 +81,8 @@ class AWSCron:
             return ['#', int(rule.split('#')[0]), int(rule.split('#')[1])]
 
 
+
+
         new_rule = None
         if rule == '*':
           new_rule = str(min) + "-" + str(max)
@@ -109,13 +111,14 @@ class AWSCron:
         allows = []
         for s in new_rule.split(','):
             if '-' in s:
-                parts = s.split('-');
+                parts = s.split('-')
                 start = int(parts[0])
                 end = int(parts[1])
                 for i in range(start, end + 1, 1):
                     allows.append(i)
             else:
                 allows.append(int(s))
+        allows.sort()
         return allows
 
 
