@@ -81,8 +81,6 @@ class AWSCron:
             return ['#', int(rule.split('#')[0]), int(rule.split('#')[1])]
 
 
-
-
         new_rule = None
         if rule == '*':
           new_rule = str(min) + "-" + str(max)
