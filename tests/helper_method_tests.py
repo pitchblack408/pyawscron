@@ -38,6 +38,26 @@ class NextTestCase(unittest.TestCase):
         self.assertEqual(str(expected_list), str(result))
 
 
+
+
+    def test_get_all_schedule_bw_dates_accept_datetime(self):
+        """Testing - retrieve all datetimes between a start and end date when aws cron expressing is set to
+           cron(Minutes Hours Day-of-month Month Day-of-week Year)
+           cron(1 2 3 4 5 2022)
+           run on every 2:01, 3rd day, April, 2022 -> which is a specific datetime, not a range
+           Where start datetime is 8/7/2021 8:30:57 UTC
+           Where end datetime is 8/7/2021 11:30:57 UTC
+        :return:
+        """
+
+        expected_list = [datetime.datetime(2022, 4, 3, 2, 1, tzinfo=datetime.timezone.utc)]
+        # datetime.datetime(year, month, day, hour, minute, second, tzinfo)
+        from_dt = datetime.datetime(2021, 8, 7, 8, 30, 57, tzinfo=datetime.timezone.utc)
+        to_date = datetime.datetime(2022, 8, 7, 11, 30, 57, tzinfo=datetime.timezone.utc)
+        result = AWSCron.get_all_schedule_bw_dates(from_dt, to_date, '1 2 3 4 5 2022')
+        self.assertEqual(str(expected_list), str(result))
+
+
     def test_get_next_n_schedule(self):
         """Testing - retrieve n number of datetimes after start date  when aws cron expressing is set to
            run every 23 minutes. cron(Minutes Hours Day-of-month Month Day-of-week Year)
