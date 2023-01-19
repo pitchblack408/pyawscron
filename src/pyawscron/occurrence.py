@@ -2,6 +2,7 @@ import math
 import datetime
 from .commons import Commons
 from dateutil.relativedelta import relativedelta
+import calendar
 
 class Occurrence():
     def __init__(self, AWSCron, utc_datetime):
@@ -16,7 +17,7 @@ class Occurrence():
     def __find_once(self, parsed, datetime_from):
 
         if self.iter > 10:
-            raise Exception("AwsCronParser : this shouldn't happen, but iter > 10")
+            raise Exception(f"AwsCronParser : this shouldn't happen, but iter {self.iter} > 10 ")
         self.iter += 1
         current_year = datetime_from.year
         current_month = datetime_from.month
@@ -33,16 +34,23 @@ class Occurrence():
             return self.__find_once(parsed, datetime.datetime(year + 1, 1, 1, tzinfo=datetime.timezone.utc))
 
         is_same_month = True if year == current_year and month == current_month else False
-
         p_days_of_month = parsed.days_of_month
+        is_w_in_current_month = None
+
         if len(p_days_of_month) == 0:
             p_days_of_month = Commons.get_days_of_month_from_days_of_week(year, month, parsed.days_of_week)
         elif p_days_of_month[0] == 'L':
             p_days_of_month = Commons.get_days_of_month_for_L(year, month, int(p_days_of_month[1]))
         elif p_days_of_month[0] == 'W':
-            p_days_of_month = Commons.get_days_of_month_for_W(year, month, int(p_days_of_month[1]))
-
-        day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
+            if Commons.is_day_in_month(year, month, int(p_days_of_month[1])):
+                p_days_of_month = Commons.get_days_of_month_for_W(year, month, int(p_days_of_month[1]))
+                is_w_in_current_month = True
+            else:
+                is_w_in_current_month = False
+        if is_w_in_current_month is not None and not is_w_in_current_month:
+            day_of_month = False
+        else:
+            day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
         if not day_of_month:
             dt = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(months=+1)
             return self.__find_once(parsed, dt)
@@ -82,16 +90,24 @@ class Occurrence():
             return self.__find_prev_once(parsed, dt)
 
         is_same_month = True if year == current_year and month == current_month else False
-
         p_days_of_month = parsed.days_of_month
+        is_w_in_current_month = None
+
         if len(p_days_of_month) == 0:
             p_days_of_month = Commons.get_days_of_month_from_days_of_week(year, month, parsed.days_of_week)
         elif p_days_of_month[0] == 'L':
             p_days_of_month = Commons.get_days_of_month_for_L(year, month, int(p_days_of_month[1]))
         elif p_days_of_month[0] == 'W':
-            p_days_of_month = Commons.get_days_of_month_for_W(year, month, int(p_days_of_month[1]))
+            if Commons.is_day_in_month(year, month, int(p_days_of_month[1])):
+                p_days_of_month = Commons.get_days_of_month_for_W(year, month, int(p_days_of_month[1]))
+                is_w_in_current_month = True
+            else:
+                is_w_in_current_month = False
+        if is_w_in_current_month is not None and not is_w_in_current_month:
+            day_of_month = False
+        else:
+            day_of_month = Commons.array_find_last(p_days_of_month, lambda c:  c <= (current_day_of_month if is_same_month else 31))
 
-        day_of_month = Commons.array_find_last(p_days_of_month, lambda c:  c <= (current_day_of_month if is_same_month else 31))
         if not day_of_month:
             dt = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
             return self.__find_prev_once(parsed, dt)

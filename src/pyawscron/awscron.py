@@ -198,9 +198,9 @@ class AWSCron:
             start = from_date.replace(second=0, microsecond=0) - datetime.timedelta(seconds=1)
             stop = to_date.replace(second=0, microsecond=0)
 
-            while start <= stop:
+            while start is not None and start <= stop:
                 start = cron_iterator.occurrence(start).next()
-                if start > stop:
+                if start is None or start > stop:
                     break
                 schedule_list.append(start)
 
