@@ -245,9 +245,49 @@ class NextTestCase(unittest.TestCase):
             print(f"Result: {dt}\tExpected: {expected}\n")
             self.assertEqual(expected, str(dt))
 
-
-
     def test_generate_multiple_next_11(self):
+        """ At 09:30 AM, on the weekday nearest day 3 of the month
+            cron(Minutes Hours Day-of-month Month Day-of-week Year)
+            W ==>>This character is used to specify the weekday (Monday-Friday) nearest the given day.
+        :return:
+        """
+        cron = '0 0 31W * ? 2020'
+        expected_list = ['2020-05-29 00:00:00+00:00',
+                         '2020-07-31 00:00:00+00:00',
+                         '2020-08-31 00:00:00+00:00']
+
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 4, 30, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
+
+    def test_generate_multiple_next_12(self):
+        """ At 09:30 AM, on the weekday nearest day 3 of the month
+            cron(Minutes Hours Day-of-month Month Day-of-week Year)
+            W ==>>This character is used to specify the weekday (Monday-Friday) nearest the given day.
+        :return:
+        """
+        cron = '0 0 31W * ? *'
+        expected_list = ['2020-12-31 00:00:00+00:00',
+                         '2021-01-29 00:00:00+00:00',]
+
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2020, 12, 30, 22, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
+    def test_generate_multiple_next_12(self):
         """ On 4th and 5th minute of every hour for every day for every month and every year
             Testing if order in the minute affects results when using the wild card ","
             cron(Minutes Hours Day-of-month Month Day-of-week Year)
@@ -279,7 +319,7 @@ class NextTestCase(unittest.TestCase):
 
 
 
-    def test_generate_multiple_next_occurences12(self):
+    def test_generate_multiple_next_occurences13(self):
         """At 12:15 PM, only on Sunday and Monday
            Testing if order in the Month or Day-of-week affects results when using the wild card ","
            cron(Minutes Hours Day-of-month Month Day-of-week Year)
@@ -312,7 +352,7 @@ class NextTestCase(unittest.TestCase):
 
 
 
-    def test_generate_multiple_next_13(self):
+    def test_generate_multiple_next_14(self):
         """Every minute between 10:00 PM and 10:/5 PM, on day 09 of the month, only in May,
            only in 2020, 2021, and 2022
            Testing if order in the Year affects results when using the wild card ","

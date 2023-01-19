@@ -34,7 +34,7 @@ class Commons:
         """
         Static method c <= (current_minute if is_same_date and hour == current_hour else 0)
         """
-        # Using reversed as an iterator to give an iterator to iterate upon 
+        # Using reversed as an iterator to give an iterator to iterate upon
         # instead of fully reversing the list that will utilize lot of space.
         for seq in reversed(sequence):
             if function(seq) == True:
@@ -80,15 +80,20 @@ class Commons:
         # offset = [0, 1, -1, 2, -2].find((c) => is_weekday(year, month, day + c))
         offset = Commons.array_find_first([0, 1, -1, 2, -2], lambda c: Commons.is_weekday(year, month, day + c))
         if offset is None:
-            raise Exception('get_days_of_month_for_W - should not happen')
-        return [day + offset]
+            raise Exception("get_days_of_month_for_W, offset is None which should never happen")
+        result = day + offset
+
+        last_day_of_month = calendar.monthrange(year, month)[1]
+        if result > last_day_of_month:
+            return []
+        return [result]
 
     @staticmethod
     def is_weekday(year, month, day):
         if day < 1 or day > 31:
-            raise Exception("must be 1 > day <= 31 ")
-        this_date = datetime.datetime(year, month, day, tzinfo=datetime.timezone.utc)
-        if this_date.month != month:
+            return False
+        this_date = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(days=day - 1)
+        if not(this_date.month == month and this_date.year == year):
             return False
         # pyhthon: Mon:0 Friday:4
         return this_date.weekday() >= 0 and this_date.weekday() <= 4
@@ -100,4 +105,13 @@ class Commons:
     @staticmethod
     def datetime_to_millisec(dt_obj):
         return dt_obj.timestamp() * 1000
+
+    @staticmethod
+    def is_day_in_month(year, month, test_day):
+        try:
+            this_date = datetime.datetime(year, month, test_day, tzinfo=datetime.timezone.utc)
+            return True
+        except ValueError as e:
+            if str(e) == 'day is out of range for month':
+                return False
 
