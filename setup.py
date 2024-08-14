@@ -34,5 +34,5 @@ if __name__ == "__main__":
         package_dir={"": "src"},
         packages=find_packages(where="src"),
         python_requires=">=3.6",
-        install_requires=["python-dateutil~=2.8.1"],
+        install_requires=["python-dateutil>=2.8.1"],
     )
