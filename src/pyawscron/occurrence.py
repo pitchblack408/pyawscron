@@ -5,10 +5,8 @@ from dateutil.relativedelta import relativedelta
 import calendar
 
 class Occurrence():
-    def __init__(self, AWSCron, utc_datetime):
-        if utc_datetime.tzinfo is None or utc_datetime.tzinfo != datetime.timezone.utc:
-            raise Exception("Occurance utc_datetime must have tzinfo == datetime.timezone.utc")
-        self.utc_datetime = utc_datetime
+    def __init__(self, AWSCron, any_datetime):
+        self.any_datetime = any_datetime
         self.cron = AWSCron
         self.iter = 0
 
@@ -31,7 +29,7 @@ class Occurrence():
 
         month = Commons.array_find_first(parsed.months, lambda c: c >= (current_month if year == current_year else 1))
         if not month:
-            return self.__find_once(parsed, datetime.datetime(year + 1, 1, 1, tzinfo=datetime.timezone.utc))
+            return self.__find_once(parsed, datetime.datetime(year + 1, 1, 1, tzinfo=self.any_datetime.tzinfo))
 
         is_same_month = True if year == current_year and month == current_month else False
         p_days_of_month = parsed.days_of_month
@@ -52,22 +50,22 @@ class Occurrence():
         else:
             day_of_month = Commons.array_find_first(p_days_of_month, lambda c:  c >= (current_day_of_month if is_same_month else 1))
         if not day_of_month:
-            dt = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(months=+1)
+            dt = datetime.datetime(year, month, 1, tzinfo=self.any_datetime.tzinfo) + relativedelta(months=+1)
             return self.__find_once(parsed, dt)
 
         is_same_date = is_same_month and day_of_month == current_day_of_month
 
         hour = Commons.array_find_first(parsed.hours, lambda c:  c >= (current_hour if is_same_date else 0))
         if hour is None:
-            dt = datetime.datetime(year, month, day_of_month, tzinfo=datetime.timezone.utc) + relativedelta(days=+1)
+            dt = datetime.datetime(year, month, day_of_month, tzinfo=self.any_datetime.tzinfo) + relativedelta(days=+1)
             return self.__find_once(parsed, dt)
 
         minute = Commons.array_find_first(parsed.minutes, lambda c: c >= (current_minute if is_same_date and hour == current_hour else 0))
         if minute is None:
-            dt = datetime.datetime(year, month, day_of_month, hour, tzinfo=datetime.timezone.utc) + relativedelta(hours=+1)
+            dt = datetime.datetime(year, month, day_of_month, hour, tzinfo=self.any_datetime.tzinfo) + relativedelta(hours=+1)
             return self.__find_once(parsed, dt)
 
-        return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=datetime.timezone.utc)
+        return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=self.any_datetime.tzinfo)
 
 
     def __find_prev_once(self, parsed, datetime_from : datetime):
@@ -86,7 +84,7 @@ class Occurrence():
 
         month = Commons.array_find_last(parsed.months, lambda c: c <= (current_month if year == current_year else 12))
         if not month:
-            dt = datetime.datetime(year, 1, 1, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            dt = datetime.datetime(year, 1, 1, tzinfo=self.any_datetime.tzinfo) + relativedelta(seconds=-1)
             return self.__find_prev_once(parsed, dt)
 
         is_same_month = True if year == current_year and month == current_month else False
@@ -109,22 +107,22 @@ class Occurrence():
             day_of_month = Commons.array_find_last(p_days_of_month, lambda c:  c <= (current_day_of_month if is_same_month else 31))
 
         if not day_of_month:
-            dt = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            dt = datetime.datetime(year, month, 1, tzinfo=self.any_datetime.tzinfo) + relativedelta(seconds=-1)
             return self.__find_prev_once(parsed, dt)
 
         is_same_date = is_same_month and day_of_month == current_day_of_month
 
         hour = Commons.array_find_last(parsed.hours, lambda c:  c <= (current_hour if is_same_date else 23))
         if hour is None:
-            dt = datetime.datetime(year, month, day_of_month, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            dt = datetime.datetime(year, month, day_of_month, tzinfo=self.any_datetime.tzinfo) + relativedelta(seconds=-1)
             return self.__find_prev_once(parsed, dt)
 
         minute = Commons.array_find_last(parsed.minutes, lambda c: c <= (current_minute if is_same_date and hour == current_hour else 59))
         if minute is None:
-            dt = datetime.datetime(year, month, day_of_month, hour, tzinfo=datetime.timezone.utc) + relativedelta(seconds=-1)
+            dt = datetime.datetime(year, month, day_of_month, hour, tzinfo=self.any_datetime.tzinfo) + relativedelta(seconds=-1)
             return self.__find_prev_once(parsed, dt)
 
-        return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=datetime.timezone.utc)
+        return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=self.any_datetime.tzinfo)
 
 
     def next(self):
@@ -133,8 +131,8 @@ class Occurrence():
         :return:
         """
         self.iter = 0
-        from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) + 1) * 60000
-        dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
+        from_epoch = (math.floor(Commons.datetime_to_millisec(self.any_datetime)/60000.0) + 1) * 60000
+        dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=self.any_datetime.tzinfo)
         return self.__find_once(self.cron, dt)
 
 
@@ -144,6 +142,6 @@ class Occurrence():
         :return:
         """
         self.iter = 0
-        from_epoch = (math.floor(Commons.datetime_to_millisec(self.utc_datetime)/60000.0) - 1) * 60000
-        dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=datetime.timezone.utc)
+        from_epoch = (math.floor(Commons.datetime_to_millisec(self.any_datetime)/60000.0) - 1) * 60000
+        dt = datetime.datetime.fromtimestamp(from_epoch / 1000.0, tz=self.any_datetime.tzinfo)
         return self.__find_prev_once(self.cron, dt)

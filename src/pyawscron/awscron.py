@@ -41,10 +41,8 @@ class AWSCron:
         self.rules = cron.split(' ')
         self.__parse()
 
-    def occurrence(self, utc_datetime):
-        if utc_datetime.tzinfo is None or utc_datetime.tzinfo != datetime.timezone.utc:
-            raise Exception("Occurrence utc_datetime must have tzinfo == datetime.timezone.utc")
-        return Occurrence(self, utc_datetime)
+    def occurrence(self, any_datetime):
+        return Occurrence(self, any_datetime)
 
     def __str__(self):
         return f"cron({self.cron})"
@@ -132,8 +130,7 @@ class AWSCron:
         """
         schedule_list = list()
         if not isinstance(from_date, datetime.datetime):
-            raise ValueError("Invalid from_date. Must be of type datetime.dateime" \
-                             " and have tzinfo = datetime.timezone.utc")
+            raise ValueError("Invalid from_date. Must be of type datetime.dateime")
         else:
             cron_iterator = AWSCron(cron)
             for i in range(n):
@@ -156,8 +153,7 @@ class AWSCron:
         """
         schedule_list = list()
         if not isinstance(from_date, datetime.datetime):
-            raise ValueError("Invalid from_date. Must be of type datetime.dateime" \
-                             " and have tzinfo = datetime.timezone.utc")
+            raise ValueError("Invalid from_date. Must be of type datetime.dateime")
         else:
             cron_iterator = AWSCron(cron)
             for i in range(n):
@@ -174,8 +170,8 @@ class AWSCron:
         If the cron expression matches either 'from_date' and/or 'to_date',
         those times will be returned as well unless 'exclude_ends=True' is passed.
 
-        :param from_date: datetime object from where the schedule will start with tzinfo in utc.
-        :param to_date: datetime object to where the schedule will end with tzinfo in utc.
+        :param from_date: datetime object from where the schedule will start.
+        :param to_date: datetime object to where the schedule will end.
         :param cron: str of aws cron to be parsed
         :param exclude_ends: bool defaulted to false to not exclude the end date
         :return: list of datetime objects
@@ -189,9 +185,9 @@ class AWSCron:
                              "  {0} != {1}".format(type(from_date), type(to_date)))
         
         elif (not isinstance(from_date, datetime.datetime) or 
-            (from_date.tzinfo != datetime.timezone.utc)):
+            (from_date.tzinfo != to_date.tzinfo)):
             raise ValueError("Invalid from_date and to_date. Must be of type datetime.dateime" \
-                             " and have tzinfo = datetime.timezone.utc")
+                             " and the same tzinfo")
         else:
             schedule_list = []
             cron_iterator = AWSCron(cron)
