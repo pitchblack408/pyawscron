@@ -67,7 +67,11 @@ class Occurrence():
             dt = datetime.datetime(year, month, day_of_month, hour, tzinfo=datetime.timezone.utc) + relativedelta(hours=+1)
             return self.__find_once(parsed, dt)
 
-        return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=datetime.timezone.utc)
+        try:
+            return datetime.datetime(year, month, day_of_month, hour, minute, tzinfo=datetime.timezone.utc)
+        except ValueError:
+            dt = datetime.datetime(year, month, 1, tzinfo=datetime.timezone.utc) + relativedelta(months=+1)
+            return self.__find_once(parsed, dt)
 
 
     def __find_prev_once(self, parsed, datetime_from : datetime):

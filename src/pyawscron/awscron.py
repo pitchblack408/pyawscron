@@ -65,8 +65,7 @@ class AWSCron:
         self.days_of_week = self.__parse_one_rule(self.__replace(self.rules[4], AWSCron.DAY_WEEK_REPLACES), 1, 7)
         self.years = self.__parse_one_rule(self.rules[5], 1970, 2199)
 
-
-    def __parse_one_rule(self, rule, min, max):
+    def __parse_one_rule(self, rule, min_val, max_val):
         if rule == '?':
             return []
         if rule == 'L':
@@ -74,52 +73,58 @@ class AWSCron:
         if rule.startswith('L-'):
             return ['L', int(rule[2:])]
         if rule.endswith('L'):
-            return ['L', int(rule[0:-1])]
+            return ['L', int(rule[:-1])]
         if rule.endswith('W'):
-            return ['W', int(rule[0:-1])]
+            return ['W', int(rule[:-1])]
         if '#' in rule:
-            return ['#', int(rule.split('#')[0]), int(rule.split('#')[1])]
+            parts = rule.split('#')
+            return ['#', int(parts[0]), int(parts[1])]
 
-
-        new_rule = None
         if rule == '*':
-          new_rule = str(min) + "-" + str(max)
-        elif '/' in rule:
-            parts = rule.split('/')
-            start = None
-            end = None
-            if parts[0] == '*':
-                start = min
-                end = max
-            elif '-' in parts[0]:
-                splits = parts[0].split('-')
-                start = int(splits[0])
-                end = int(splits[1])
-            else:
-                start = int(parts[0])
-                end = max
-            increment = int(parts[1])
-            new_rule = ''
-            while start <= end:
-                new_rule += "," + str(start)
-                start += increment
-            new_rule = new_rule[1:]
-        else:
-            new_rule = rule
-        allows = []
-        for s in new_rule.split(','):
-            if '-' in s:
-                parts = s.split('-')
-                start = int(parts[0])
-                end = int(parts[1])
-                for i in range(start, end + 1, 1):
-                    allows.append(i)
-            else:
-                allows.append(int(s))
+            rule = f"{min_val}-{max_val}"
+
+        new_rule = self.expand_rule(rule, max_val)
+        allows = [int(s) for s in new_rule.split(',')]
+        allows = list(set(allows))
         allows.sort()
         return allows
 
+    def expand_rule(self, rule=None, max_val=None):
+        new_rule = ''
+        rule_collection = rule.split(',')
+        for rule_data in rule_collection:
+            if '-' in rule_data and '/' in rule_data:
+                splits = rule_data.split('-')
+                end_part = splits[1].split('/')
+                start = int(splits[0])
+                end = int(end_part[0])
+                increment = 1
+                new_rule = self.generate_range(start, end, increment, new_rule)
+                start = end
+                end = max_val
+                increment = int(end_part[1])
+                new_rule = self.generate_range(start, end, increment, new_rule)
+            elif '/' in rule_data:
+                splits = rule_data.split('/')
+                start = int(splits[0])
+                end = max_val
+                increment = int(splits[1])
+                new_rule = self.generate_range(start, end, increment, new_rule)
+            elif '-' in rule_data:
+                start, end = map(int, rule_data.split('-'))
+                increment = 1
+                new_rule = self.generate_range(start, end, increment, new_rule)
+            else:
+                new_rule += "," + rule_data
+        expanded_rule = new_rule[1:]
+        return expanded_rule
 
+    def generate_range(self, start, end, increment, new_rule=None):
+        rule = new_rule if new_rule is not None else ""
+        while start <= end:
+            rule += "," + str(start)
+            start += increment
+        return rule
     @staticmethod
     def get_next_n_schedule(n, from_date, cron):
         """
