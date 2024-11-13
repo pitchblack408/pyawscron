@@ -112,8 +112,14 @@ class AWSCron:
                 parts = s.split('-')
                 start = int(parts[0])
                 end = int(parts[1])
-                for i in range(start, end + 1, 1):
-                    allows.append(i)
+                if start <= end:
+                    for i in range(start, end + 1):
+                        allows.append(i)
+                else:
+                    for i in range(start, 8):
+                        allows.append(i)
+                    for i in range(1, end + 1):
+                        allows.append(i)
             else:
                 allows.append(int(s))
         allows.sort()

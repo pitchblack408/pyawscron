@@ -385,6 +385,35 @@ class NextTestCase(unittest.TestCase):
             print(f"Result: {dt}\tExpected: {expected}\n")
             self.assertEqual(expected, str(dt))
 
+    def test_generate_multiple_next_occurences15(self):
+        """
+        Tests the generation of multiple next occurrences 
+        from a specific CRON expression. Ensures that
+        days_of_week are within the expected range.
+        :return: None
+        """
+        cron = '00 4 ? * 3-1 *'
+        expected_list= ['2024-11-14 04:00:00+00:00',
+                        '2024-11-15 04:00:00+00:00',
+                        '2024-11-16 04:00:00+00:00',
+                        '2024-11-17 04:00:00+00:00',
+
+                        '2024-11-19 04:00:00+00:00',
+                        '2024-11-20 04:00:00+00:00',
+                        '2024-11-21 04:00:00+00:00',
+                        '2024-11-22 04:00:00+00:00',
+                        '2024-11-23 04:00:00+00:00',
+                        '2024-11-24 04:00:00+00:00']
+        cron = AWSCron(cron)
+        dt = datetime.datetime(2024, 11, 13, 12, 30, 57, tzinfo=datetime.timezone.utc)
+        results = []
+        for expected in expected_list:
+            print(f"Input {cron}, occurrence: {dt}")
+            dt = cron.occurrence(dt).next()
+            results.append(str(dt))
+            print(f"Result: {dt}\tExpected: {expected}\n")
+            self.assertEqual(expected, str(dt))
+
 
 if __name__ == '__main__':
     unittest.main()
